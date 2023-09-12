@@ -1,0 +1,5 @@
+C:\Users\filip\source\repos\SMSH\Windows-exe\SMSH.exe
+C:\Users\filip\source\repos\SMSH\Windows-exe\SMSH.dll
+C:\Users\filip\source\repos\SMSH\Windows-exe\SMSH.deps.json
+C:\Users\filip\source\repos\SMSH\Windows-exe\SMSH.runtimeconfig.json
+C:\Users\filip\source\repos\SMSH\Windows-exe\SMSH.pdb
