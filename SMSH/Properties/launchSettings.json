@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "SMSH": {
+      "commandName": "Project",
+      "commandLineArgs": "documentation.smsh",
+      "workingDirectory": "C:\\Users\\filip\\source\\repos\\SMSH\\SMSH"
+    }
+  }
+}
