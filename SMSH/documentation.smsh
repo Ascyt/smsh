@@ -1,8 +1,12 @@
 :title SMSH-Documentation 
-:header
-	.h1 SMSH Documentation
+>:header
+>	.h1 SMSH Documentation
 	
 # What is SMSH? 
+
+.ul
+	.li TestA
+	.li TestB
 
 SMSH stands for <b Simple Markup for Styled HTML>. 
 It is essentially a fast and easy markup language used to write a pretty and structured HTML document.
@@ -11,9 +15,8 @@ It is essentially a fast and easy markup language used to write a pretty and str
 
 SMSH is mostly for writing documents and notes, however it is not made for writing fully interactive webpages. 
 SMSH handles the sections, the HTML tags and more, making them all much easier to write and to read. 
-. 
-	Since SMSH simply compiles to HTML (with some predefined CSS included), anyone can just open up the compiled HTML 
-	in their web browser, without the need for any install, setup, unzip, etc. 
+Since SMSH simply compiles to HTML (with some predefined CSS included), anyone can just open up the compiled HTML \
+in their web browser, without the need for any install, setup, unzip, etc. 
 
 # Compiler
 
@@ -24,10 +27,8 @@ Here you can also find the source code, together with the code used to generate 
 
 Argument 1 is for the input file, and there is an optional argument <code -o> for the output file, which defaults to <code <i filename>.html>. 
 
-. 
-	For a simple way to run it on Windows you can put the <i Windows-executable> into your folder, go into that folder, press <i Windows + L>, 
-	type in <code smsh.exe ../<i your-file-here.smsh>> and hit <i Enter>. 
-	Now you have a minimized HTML you can double-click to open in your web-browser!
+For a simple way to run it on Windows you can put the <i Windows-executable> into your folder, go into that folder, press <i Windows + L>, type in <code smsh.exe ../<i your-file-here.smsh>> and hit <i Enter>. 
+Now you have a minimized HTML you can double-click to open in your web-browser!
 
 # Element syntax
 
@@ -35,7 +36,7 @@ SMSH goes from top to bottom. Empty lines and lines containing nothing but white
 
 .card
 	.pre 
-		\.h4 I am a simple header :)
+		. .h4 I am a simple header :)
 		
 	.h4 I am a simple header :)
 	
@@ -43,13 +44,13 @@ Alternatively, you can put everything in a line lower with one tab as indentatio
 
 .card
 	.pre
-		\.h4
-		\.	I am also a simple header. 
-		\.	However, you can give me multiple lines!
+		. .h4
+		. 	I am also a simple header. 
+		. 	However, you can give me multiple lines!
 		
 	.h4
-		. I am also a simple header. 
-		. However, you can give me multiple lines!
+		I am also a simple header. 
+		However, you can give me multiple lines!
 	
 This will not make linebreaks, unless you're using <code .pre>. Use <code \ > to be able to put a tab in front of your line to escape the indentation.
 
@@ -72,11 +73,11 @@ Or you could choose to have your element be only text, in which case you don't n
 You can also nest elements:
 .card 
 	.pre
-		\.ul
-		\	.li
-		\		.h4 Headers...
-		\	.li
-		\		.h4 ...in lists!
+		. .ul
+		. 	.li
+		. 		.h4 Headers...
+		. 	.li
+		. 		.h4 ...in lists!
 		
 	.ul
 		.li
