@@ -11,9 +11,18 @@ public class Program
     public class CodeException : Exception
     {
         public int line;
-        public CodeException(string message, int? line = null) : base(message) 
+        public int? column;
+
+        public CodeException(string message, int line, int? indents = null, int? column = null) : base(message) 
         {
-            this.line = line ?? -1;
+            this.line = line;
+            if (column != null || indents != null)
+                this.column = (column ?? 0) + (indents ?? 0);
+        }
+
+        public override string ToString()
+        {
+            return $"Error on line {line + 1}{(column != null ? $" at column {column + 1}" : "")}:\n\t{Message}";
         }
     }
 
@@ -44,14 +53,14 @@ public class Program
             Console.WriteLine($"File has been converted to HTML at: {Path.GetFullPath(outputPath)}");
         }
         catch (NotImplementedException e) { throw e; } // Just so I can quickly comment out the other exceptions
-        catch (CodeException e)
+        /*catch (CodeException e)
         {
-            Console.WriteLine(e.line == -1 ? $"Error:\n{e.Message}" : $"Error on line {e.line + 1}:\n{e.Message}");
+            Console.WriteLine(e);
         }
         catch (Exception e)
         {
             Console.WriteLine($"Error:\n{e.Message}");
-        }
+        }*/
     }
 
     public static string FormatHTML(string markup, string html)

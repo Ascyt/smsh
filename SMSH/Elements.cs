@@ -24,9 +24,8 @@ namespace Elements
             {
                 string line = lines[i];
 
-                if (line.Trim() == "") // Empty line
+                if (line.Length == 0)
                     continue;
-
 
                 switch (line[0])
                 {
@@ -34,52 +33,16 @@ namespace Elements
                         if (currentSection != null)
                             sections.Add(currentSection);
 
-                        bool withTitle = line[1] != '#';
-                        string sectionName = line.Substring(withTitle ? 1 : 2).Trim();
-
-                        currentSection = new Section(sectionName, withTitle);
-                        break;
-                    case ':': // Special tag
-                        if (currentSection != null)
-                            throw new CodeException("Special tag must be defined above all sections.", i);
-
-                        switch (line.Split(' ')[0])
-                        {
-                            case ":title":
-                                if (title != null)
-                                    throw new CodeException("Title already defined.", i);
-
-                                title = line.Substring(7).Trim();
-                                break;
-                            case ":header":
-                                if (header != null)
-                                    throw new CodeException("Header already defined.", i);
-
-                                header = GetElement(line, ref i, 1);
-                                break;
-                            default:
-                                throw new CodeException("Invalid special tag.", i);
-                        }
+                        currentSection = new Section(line.Substring(1).Trim(), true);
                         break;
                     case '\t':
                         if (line.Trim() != "")
-                            throw new CodeException("Too large amount of indentation (expected none).", i);
+                            throw new CodeException("Too large amount of indentation (expected none).", i, 0);
                         break;
                     case ' ':
-                        throw new CodeException("Invalid indentation (expected tab, not space).", i);
-                    case '>': // Comment
-                        break;
-
-                    case ',': // Margin
-                    case '.': // Tag
-                        if (currentSection == null)
-                            throw new CodeException("No section defined.", i);
-                        currentSection.elements.Add(GetElement(line, ref i, 1));
-                        break;
+                        throw new CodeException("Invalid indentation (expected tab, not space).", i, 0);
                     default:
-                        if (currentSection == null)
-                            throw new CodeException("No section defined.", i);
-                        currentSection.elements.Add(GetElement(". " + line, ref i, 1));
+                        TryAddElement(GetElement(line, ref i, 0), currentSection?.elements);
                         break;
                 }
             }
@@ -87,23 +50,34 @@ namespace Elements
             if (currentSection != null)
                 sections.Add(currentSection);
 
-            Element GetElement(string line, ref int i, int indents)
+            void TryAddElement(Element? element, List<Element>? elementList)
+            {
+                if (element != null && elementList != null)
+                {
+                    elementList.Add(element);
+                }
+            }
+
+            Element? GetElement(string line, ref int i, int indents)
             {
                 string trimmedLine = line.TrimStart();
 
-                if (trimmedLine[0] == ',') // Margin
-                {
-                    string amount = trimmedLine.Substring(1).Trim();
-                    if (amount == "")
-                        amount = "16px";
+                if (trimmedLine.Length == 0)
+                    return null;
 
-                    return new Element(".div", "", new Dictionary<string, string>()
-                    {
-                        {"style", $"margin-bottom:{amount};"},
-                    });
-                }
 
                 string tag = trimmedLine.Split(' ')[0];
+                if (!".,>#:".Contains(tag[0]))
+                {
+                    return GetElement(". " + line, ref i, indents);
+                }
+
+                if (tag == ".")
+                {
+                    trimmedLine = trimmedLine[trimmedLine.Length - 1] == '\\' ?
+                            trimmedLine.Substring(0, trimmedLine.Length - 1) :
+                            trimmedLine + "<br>";
+                }
 
                 if (tag.Length >= 4 && tag.Substring(0, 4) == ".img")
                 {
@@ -115,77 +89,114 @@ namespace Elements
 
                     keyValuePairs["alt"] = alt;
 
-                    Element element = new Element(tag, "", keyValuePairs);
+                    Element imageElement = new Element(tag, "", keyValuePairs);
 
-                    if (!element.attributes.ContainsKey("href"))
+                    if (!imageElement.attributes.ContainsKey("href"))
                         throw new CodeException("Image must have a link attribute.", i);
 
-                    string src = element.attributes["href"];
-                    element.attributes["src"] = src;
-                    element.attributes.Remove("href");
+                    imageElement.attributes["src"] = imageElement.attributes["href"];
+                    imageElement.attributes.Remove("href");
 
-                    return element;
+                    return imageElement;
                 }
 
-                if (trimmedLine.Substring(tag.Length).TrimEnd() == "")
+                bool isHeader = false;
+                switch (trimmedLine[0])
                 {
-                    Element element = new Element(tag);
+                    case '>': // Comment
+                        return null;
+                    case ',': // Margin
+                        const int DEFAULT_MARGIN = 16;
+
+                        string amount = trimmedLine.Substring(1).Trim();
+                        if (amount == "")
+                            amount = $"{DEFAULT_MARGIN}px";
+
+                        int amountInt;
+                        if (int.TryParse(amount, out amountInt))
+                        {
+                            amount = $"{amountInt * DEFAULT_MARGIN}px";
+                        }
+
+                        return new Element(".div", "", new Dictionary<string, string>()
+                        {
+                            {"style", $"margin-bottom:{amount};"},
+                        });
+                    case '#': // Section
+                        throw new CodeException("Section can't be defined in elements.", i, indents);
+                    case ':': // Special tag
+                        /*if (indents > 0)
+                            throw new CodeException("Special tags can't be defined in elements.", i, indents);*/
+
+                        if (currentSection != null)
+                            throw new CodeException("Special tag must be defined above all sections.", i);
+
+                        switch (line.Split(' ')[0])
+                        {
+                            case ":title":
+                                if (title != null)
+                                    throw new CodeException("Title already defined.", i);
+
+                                title = line.Substring(7).Trim();
+                                return null;
+                            case ":header":
+                                if (header != null)
+                                    throw new CodeException("Header already defined.", i);
+
+                                isHeader = true;
+                                break;
+                            default:
+                                throw new CodeException("Invalid special tag.", i);
+                        }
+                        break;
+                    default:
+                        if (currentSection == null)
+                            throw new CodeException("No section defined.", i);
+                        break;
+                }
+
+                Element element = new Element(tag, trimmedLine.Length == tag.Length ? "" : trimmedLine.Substring(tag.Length + 1));
+
+                i++;
+
+                if (i >= lines.Length)
+                    return element;
+
+                int actualIndents = ActualIndents(lines[i]);
+
+                while (actualIndents > indents)
+                {
+                    if (lines[i].Trim().Length > 0)
+                    {
+                        string newElementTag = lines[i].TrimStart().Split(' ')[0];
+
+                        switch (newElementTag[0])
+                        {
+                            case '>': // Comment
+                                break;
+                            case '\\':
+                            default: // Tag, Text, Margin
+                                TryAddElement(GetElement(lines[i], ref i, indents + 1), element.elements);
+                                break;
+                        }
+                    }
+
                     i++;
 
                     if (i >= lines.Length)
                         return element;
 
-                    int actualIndents = ActualIndents(lines[i]);
+                    actualIndents = ActualIndents(lines[i]);
+                }
+                i--;
 
-                    if (actualIndents != indents)
-                        throw new CodeException($"Incorrect amount of indentation (expected {indents}, got {actualIndents}).", i);
-
-                    while (actualIndents >= indents)
-                    {
-                        if (actualIndents != lines[i].Length) // Not only whitespaces
-                        {
-                            if (actualIndents > indents)
-                                throw new CodeException($"Too large amount of indentation (expected {indents}, got {actualIndents}).", i);
-
-                            string newElementTag = lines[i].TrimStart().Split(' ')[0];
-
-                            switch (newElementTag[0])
-                            {
-                                case ':': // Special tag
-                                case '.': // Tag
-                                case ',': // Margin
-                                    if (element.text != "")
-                                        throw new CodeException("The same element cannot have both text and more elements.", i);
-
-                                    element.elements.Add(GetElement(lines[i], ref i, indents + 1));
-                                    break;
-                                case '>': // Comment
-                                    break;
-                                case '\\':
-                                default: // Text
-                                    if (element.elements.Count > 0)
-                                        throw new CodeException("The same element cannot have both text and more elements.", i);
-
-                                    element.text += lines[i].Substring(indents + (newElementTag[0] == '\\' ? 1 : 0));
-                                    if (tag == ".pre")
-                                        element.text += "<br>";
-                                    break;
-                            }
-                        }
-
-                        i++;
-
-                        if (i >= lines.Length)
-                            return element;
-
-                        actualIndents = ActualIndents(lines[i]);
-                    }
-                    i--;
-
-                    return element;
+                if (isHeader)
+                {
+                    header = element;
+                    return null;
                 }
 
-                return new Element(tag, line.Substring(indents + tag.Length).Trim() + "<br>");
+                return element;
 
                 int ActualIndents(string text)
                 {
@@ -302,7 +313,7 @@ namespace Elements
                     if (hasChangedAttribute)
                     {
                         // TODO: Add add line and column=index number to exception
-                        throw new CodeException($"Unexpected character outside of attribute: '{tag[i]}'.");
+                        throw new CodeException($"Unexpected character outside of attribute: '{tag[i]}'.", -1);
                     }
 
                     newTag += tag[i];
@@ -334,7 +345,7 @@ namespace Elements
                             }
 
                             // TODO: Add add line and column=index number to exception
-                            throw new CodeException($"Unexpected attribute closing character: '{c}'.");
+                            throw new CodeException($"Unexpected attribute closing character: '{c}'.", -1);
                         }
                     }
                     return false;
@@ -395,7 +406,7 @@ namespace Elements
                         formattingDelta--;
 
                         if (formattingDelta < 0) // TODO: Add line and column=index number to exception
-                            throw new CodeException($"Unexpected format closing tag in line \"{text}\".");
+                            throw new CodeException($"Unexpected format closing tag in line \"{text}\".", -1);
 
                         if (formattingDelta == 0)
                         {
@@ -426,7 +437,8 @@ namespace Elements
                 }
 
                 if (formattingDelta > 0)
-                    throw new CodeException("Unclosed format tag.");
+                    // TODO: Add line and column=index number to exception
+                    throw new CodeException("Unclosed format tag.", -1);
 
                 return result;
             }
