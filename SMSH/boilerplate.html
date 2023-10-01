@@ -16,15 +16,9 @@
     </nav>
 
     <div id="content">
-        <div id="header">
-        <section>
-            {{HEADER}}
-        </section>
-        </div>
-
         {{BODY}}
 
-        <a href="#" id="back-to-top">Back to top</a>
+        <a href="#" id="back-to-top">{{TO_TOP_TEXT}}</a>
     </div>
     </div>
 </body>
@@ -39,35 +33,35 @@
     font-size: large;
     margin: 10px;
     text-align: left;
-    background-color: #000000;
-    color: #c0c0c0;
+    background-color: {{#00}};
+    color: {{#c0}};
     line-height: 28px;
     }
 
     section {
     border-top-style: solid;
     border-top-width: 3px;
-    border-color: #101010;
+    border-color: {{#10}};
 
     padding-top: 10px;
     margin-bottom: 10px;
     }
 
     .light {
-    color: #ffffff;
+    color: {{#ff}};
     }
 
     .dark {
-    color: #808080;
+    color: {{#80}};
     }
 
     .card {
-    border-color: #808080;
+    border-color: {{#80}};
     border-radius: 5px;
     border-width: 2px;
     border-style: solid;
 
-    background-color: #080808;
+    background-color: {{#08}};
 
     padding: 10px;
     margin-top: 10px;
@@ -105,20 +99,20 @@
     }
 
     th {
-    background-color: #202020;
-    color: #ffffff;
+    background-color: {{#20}};
+    color: {{#ff}};
     }
 
     th,
     td {
     padding: 8px;
-    border: 1px solid #404040;
+    border: 1px solid {{#40}};
     border-style: solid;
     text-align: center;
     }
 
     tr:nth-child(odd) {
-    background-color: #101010;
+    background-color: {{#10}};
     }
 
     .invis>td {
@@ -130,10 +124,10 @@
     white-space: pre-wrap;
     overflow-x: auto;
 
-    color: #c0c0c0;
-    background-color: #101010;
+    color: {{#c0}};
+    background-color: {{#10}};
 
-    border-color: #808080;
+    border-color: {{#80}};
     border-width: 1px;
     border-style: solid;
     border-right-style: solid;
@@ -156,47 +150,26 @@
     }
 
     #content h1 {
-    color: #ffffff;
+    color: {{#ff}};
     text-align: center;
     margin-top: 0;
     margin-bottom: 10px;
     }
     #content h2 {
-    color: #ffffff;
+    color: {{#ff}};
     text-decoration: underline;
     font-size: larger;
     }
     #content h3 {
-    color: #ffffff;
+    color: {{#ff}};
     text-decoration: underline;
     font-size: large;
     }
     #content h4 {
-    color: #ffffff;
+    color: {{#ff}};
     text-decoration: underline;
     font-size: large;
     font-weight: normal;
-    }
-
-    #header {
-    text-align: center;
-    }
-
-    #header .t,
-    #header h1 {
-    margin-bottom: -15px;
-    }
-
-    #header .t {
-    font-size: larger;
-    }
-
-    #header h1 {
-    font-size: xx-large;
-    }
-
-    #header section {
-    margin-bottom: 30px;
     }
 
     #wrapper {
@@ -205,7 +178,7 @@
 
     #sidebar {
     width: 15%;
-    color: #fff;
+    color: {{#ff}};
     }
 
     #sidebar ul {
@@ -223,7 +196,7 @@
     }
 
     #sidebar ul li a {
-    color: #fff;
+    color: {{#ff}};
     text-decoration: none;
     display: flex;
     padding-bottom: 10px;
@@ -234,31 +207,31 @@
     }
 
     #sidebar ul li:nth-child(even) {
-    background-color: #101010;
+    background-color: {{#10}};
 
     transition: ease-out 0.15s;
     }
 
     #sidebar ul li:nth-child(even):hover {
-    background-color: #303030;
+    background-color: {{#30}};
 
     transition: ease-in-out 0.1s;
     }
 
     #sidebar ul li:nth-child(odd) {
-    background-color: #202020;
+    background-color: {{#20}};
 
     transition: ease-out 0.15s;
     }
 
     #sidebar ul li:nth-child(odd):hover {
-    background-color: #303030;
+    background-color: {{#30}};
 
     transition: ease-in-out 0.1s;
     }
 
     #back-to-top {
-    border-color: #808080;
+    border-color: {{#80}};
     border-radius: 5px;
     border-width: 2px;
     border-style: solid;
@@ -268,15 +241,15 @@
     display: flex;
     justify-content: center;
 
-    background-color: #101010;
-    color: #c0c0c0;
+    background-color: {{#10}};
+    color: {{#c0}};
     text-decoration: none;
 
     transition: ease-out 0.3s;
     }
 
     #back-to-top:hover {
-    background-color: #303030;
+    background-color: {{#30}};
     transition: ease-in-out 0.2s;
     }
 </style>
