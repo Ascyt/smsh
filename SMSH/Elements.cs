@@ -11,8 +11,9 @@ namespace Elements
     public class Elements
     {
         public List<Section> sections = new List<Section>();
-        public Element? header;
         public string? title;
+        public bool isLightTheme = false;
+        public string toTopText = "Back to top";
 
         public Elements(string markup)
         {
@@ -139,16 +140,26 @@ namespace Elements
 
                                 title = line.Substring(7).Trim();
                                 return null;
-                            case ":header":
-                                if (header != null)
-                                    throw new CodeException("Header already defined.", i);
+                            case ":theme":
+                                string[] light = {"light", "l"};
+                                string[] dark = {"dark", "d"};
 
-                                isHeader = true;
-                                break;
+                                string theme = line.Substring(6).Trim().ToLower();
+                                bool isLight = light.Contains(theme);
+                                bool isDark = dark.Contains(theme);
+
+                                if (!isLight && !isDark)
+                                    throw new CodeException("Invalid theme. (Valid options: light, dark)", i, line.Length - theme.Length);
+
+                                isLightTheme = isLight;
+                                return null;
+                            case ":totoptext":
+                            case ":toTopText":
+                                toTopText = line.Substring(11).Trim();
+                                return null;
                             default:
                                 throw new CodeException("Invalid special tag.", i);
                         }
-                        break;
                     default:
                         if (currentSection == null)
                             throw new CodeException("No section defined.", i);
@@ -192,7 +203,6 @@ namespace Elements
 
                 if (isHeader)
                 {
-                    header = element;
                     return null;
                 }
 
@@ -259,7 +269,7 @@ namespace Elements
 
                 this.attributes = attributes ?? ExtractAttributes(ref tag, getAttributes);
 
-                if (new string[] { "header", "card" }.Contains(tag))
+                if (new string[] { "card" }.Contains(tag))
                 {
                     if (this.attributes.ContainsKey("class"))
                         this.attributes["class"] += " " + tag;
