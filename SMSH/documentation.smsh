@@ -139,10 +139,23 @@ Here's what this section ("Sections") looks like:
 
 Elements must be under sections, and special elements (starting with <code :>) must not be. 
 
+# Custom CSS classes
+
+You can create custom CSS classes using the <code $> prefix. Here is an example:
+
+.pre
+	$myCustomClass
+		color: green;
+		font-size: large;
+
+Everything indented is part of the CSS class. You must define CSS classes before sections, and they must not be defined twice (case sensitive).
+
+.(myCustomClass) example usage of above class
+
 # Element list
 SMSH supports pretty much every HTML tag out there, to some degree at least. However, these are the most common ones:
 
-.card	
+.card
 	.h1 Header 1 <code .h1> (Default for sections)
 	.h2 Header 2 <code .h2>
 	.h3 Header 3 <code .h3>
@@ -150,7 +163,7 @@ SMSH supports pretty much every HTML tag out there, to some degree at least. How
 	. Normal text <code .>/<code >
 	.(high) high text <code .(high)>
 	.(low) low text <code .(low)>
-	.a{https://ascyt.com/} Link <code a{"https://..."}>
+	.a{https://ascyt.com/} Link <code a{"https://..."}> <br>
 	.code code .code
 		
 	.pre
