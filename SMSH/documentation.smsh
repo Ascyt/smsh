@@ -101,7 +101,7 @@ When you have a an element, you can add attributes next to the tag:
 	.pre .b[color:blue] I'm Blue da ba dee da ba daa
 	.b[color:blue] I'm Blue da ba dee da ba daa
 	
-Attributes are applied left to right and must be after the tag. The order does not matter. Also, <b attributes may not contain spaces> <i(dark) (totally not because I'm too lazy to add support for that)>
+Attributes are applied left to right and must be after the tag. The order does not matter. Spaces inside attributes are allowed.
 
 .h3 These are the types of attributes:
 
@@ -125,8 +125,8 @@ Note that you don't have to include a <code .> before the element for inline.
 
 Here's an example:
 .card 
-	.pre . I'm normal. \<b I'm bold.\> \<i I'm italic.\> \<[color:yellow] I'm piss.\> \<(light) I'm light.\> \<code I'm code.\>
-	. I'm normal. <b I'm bold.> <i I'm italic.> <[color:yellow] I'm piss.> <(light) I'm light.> <code I'm code.>
+	.pre . I'm normal. \<b I'm bold.\> \<i I'm italic.\> \<[color: yellow] I'm piss.\> \<(light) I'm light.\> \<code I'm code.\>
+	. I'm normal. <b I'm bold.> <i I'm italic.> <[color: yellow] I'm piss.> <(light) I'm light.> <code I'm code.>
 
 .(dark) Hint: Put a <code \ > before <code \<> or <code \>> to escape them and write them as normal characters.
 

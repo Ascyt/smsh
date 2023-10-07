@@ -10,10 +10,20 @@ namespace Elements
 {
     public class Elements
     {
+        public const string KEYWORD_CHARS = ".,>#:";
+
         public List<Section> sections = new List<Section>();
         public string? title;
         public bool isLightTheme = false;
         public string toTopText = "Back to top";
+
+        public readonly static Dictionary<string, char[]> getAttributes = new Dictionary<string, char[]>()
+            {
+                {"class", new char[2] { '(', ')' }},
+                {"style", new char[2] { '[', ']' }},
+                {"href", new char[2] { '{', '}' }},
+            };
+
 
         public Elements(string markup)
         {
@@ -63,15 +73,19 @@ namespace Elements
             {
                 string trimmedLine = line.TrimStart();
 
-                if (trimmedLine.Length == 0)
+                if (trimmedLine.Length == 0 || trimmedLine[0] == '>')
                     return null;
 
-
-                string tag = trimmedLine.Split(' ')[0];
-                if (!".,>#:".Contains(tag[0]))
+                if (!KEYWORD_CHARS.Contains(trimmedLine[0]))
                 {
                     return GetElement(". " + line, ref i, indents);
                 }
+
+
+                Dictionary<string, string> attributes = ExtractAttributes(i, ref trimmedLine, getAttributes);
+
+                string tag = trimmedLine.Split(' ')[0];
+                trimmedLine = FormatText(trimmedLine, indents, i);
 
                 if (tag == ".")
                 {
@@ -80,17 +94,15 @@ namespace Elements
                             trimmedLine + "<br>";
                 }
 
-                if (tag.Length >= 4 && tag.Substring(0, 4) == ".img")
+                if (tag == ".img")
                 {
                     string alt = trimmedLine.Substring(tag.Length).Trim();
                     if (alt == "")
                         alt = "Image";
 
-                    Dictionary<string, string> keyValuePairs = Element.ExtractAttributes(ref tag, Element.getAttributes);
+                    attributes["alt"] = alt;
 
-                    keyValuePairs["alt"] = alt;
-
-                    Element imageElement = new Element(tag, "", keyValuePairs);
+                    Element imageElement = new Element(tag, "", attributes);
 
                     if (!imageElement.attributes.ContainsKey("href"))
                         throw new CodeException("Image must have a link attribute.", i);
@@ -101,11 +113,8 @@ namespace Elements
                     return imageElement;
                 }
 
-                bool isHeader = false;
                 switch (trimmedLine[0])
                 {
-                    case '>': // Comment
-                        return null;
                     case ',': // Margin
                         const int DEFAULT_MARGIN = 16;
 
@@ -166,7 +175,7 @@ namespace Elements
                         break;
                 }
 
-                Element element = new Element(tag, trimmedLine.Length == tag.Length ? "" : trimmedLine.Substring(tag.Length + 1));
+                Element element = new Element(tag, trimmedLine.Length == tag.Length ? "" : trimmedLine.Substring(tag.Length + 1), attributes);
 
                 i++;
 
@@ -201,11 +210,6 @@ namespace Elements
                 }
                 i--;
 
-                if (isHeader)
-                {
-                    return null;
-                }
-
                 return element;
 
                 int ActualIndents(string text)
@@ -220,6 +224,145 @@ namespace Elements
             }
         }
 
+        static Dictionary<string, string> ExtractAttributes(int lineIndex, ref string trimmedLine, Dictionary<string, char[]> attributes)
+        {
+            string newTrimmedLine = "";
+            Dictionary<string, string> result = new Dictionary<string, string>();
+
+            string? inAttribute = null;
+            bool hasChangedAttribute = false;
+
+            int i;
+            for (i = 0; i < trimmedLine.Length; i++)
+            {
+                if (TryChangeAttribute(trimmedLine[i]))
+                {
+                    hasChangedAttribute = true;
+
+                    continue;
+                }
+
+                if (inAttribute != null)
+                {
+                    if (!result.ContainsKey(inAttribute))
+                        result[inAttribute] = "";
+                    result[inAttribute] += trimmedLine[i];
+
+                    continue;
+                }
+
+                if (trimmedLine[i] == ' ')
+                {
+                    break;
+                }
+
+                if (hasChangedAttribute)
+                {
+                    throw new CodeException($"Unexpected character outside of attribute: '{trimmedLine[i]}'.", lineIndex, i);
+                }
+                newTrimmedLine += trimmedLine[i];
+            }
+
+            trimmedLine = newTrimmedLine + ' ' + trimmedLine.Substring(i);
+            return result;
+
+            bool TryChangeAttribute(char c)
+            {
+                foreach (KeyValuePair<string, char[]> attribute in attributes)
+                {
+                    if (inAttribute == null)
+                    {
+                        if (c == attribute.Value[0])
+                        {
+                            inAttribute = attribute.Key;
+                            return true;
+                        }
+                        continue;
+                    }
+
+                    if (c == attribute.Value[1])
+                    {
+                        if (inAttribute == attribute.Key)
+                        {
+                            inAttribute = null;
+                            return true;
+                        }
+
+                        // TODO: Add add line and column=index number to exception
+                        throw new CodeException($"Unexpected attribute closing character: '{c}'.", -1);
+                    }
+                }
+                return false;
+            }
+        }
+
+        
+        public static string FormatText(string text, int indents, int lineIndex)
+        {
+            text = text.Replace("\\<", "&lt;").Replace("\\>", "&gt;");
+
+            string result = "";
+            string currentFormat = "";
+            int formattingDelta = 0;
+            const char FORMAT_START = '<';
+            const char FORMAT_END = '>';
+
+            for (int i = 0; i < text.Length; i++)
+            {
+                if (text[i] == FORMAT_START)
+                {
+                    formattingDelta++;
+
+                    if (formattingDelta == 1)
+                        continue;
+                }
+
+                if (text[i] == FORMAT_END)
+                {
+                    formattingDelta--;
+
+                    if (formattingDelta < 0)
+                        throw new CodeException($"Unexpected format closing tag.", lineIndex, indents, i);
+
+                    if (formattingDelta == 0)
+                    {
+                        if (new string[] { "br", "hr", "img", "input", "meta", "link" }.Contains(currentFormat.Trim()))
+                        {
+                            result += $"<{currentFormat}>";
+                        }
+                        else
+                        {
+                            Dictionary<string,string> attributes = ExtractAttributes(lineIndex, ref currentFormat, getAttributes);
+
+                            string formatTag = currentFormat.Split(' ')[0];
+
+                            currentFormat = FormatText(currentFormat.Substring(formatTag.Length).TrimStart(), indents, lineIndex);
+
+                            Element element = new Element(formatTag, currentFormat, attributes);
+                            result += element.ToString();
+                        }
+
+                        currentFormat = "";
+
+                        continue;
+                    }
+                }
+
+                if (formattingDelta > 0)
+                {
+                    currentFormat += text[i];
+                    continue;
+                }
+
+                result += text[i];
+            }
+
+            if (formattingDelta > 0)
+                throw new CodeException("Unclosed format tag.", lineIndex, indents, text.Length);
+
+            return result;
+        }
+
         public class Section
         {
             public string name;
@@ -229,7 +372,7 @@ namespace Elements
 
             public Section(string name, bool withTitle)
             {
-                this.name = Element.FormatText(name);
+                this.name = name;
                 this.withTitle = withTitle;
             }
 
@@ -253,21 +396,16 @@ namespace Elements
         {
             public string tag;
             public readonly Dictionary<string, string> attributes = new Dictionary<string, string>();
-            public readonly static Dictionary<string, char[]> getAttributes = new Dictionary<string, char[]>()
-            {
-                {"class", new char[2] { '(', ')' }},
-                {"style", new char[2] { '[', ']' }},
-                {"href", new char[2] { '{', '}' }},
-            };
+            
             public string text;
             public List<Element> elements = new List<Element>();
 
             public Element(string tag, string text = "", Dictionary<string, string>? attributes = null)
             {
-                if (tag[0] == '.' || tag[0] == ':')
+                if (tag.Length > 0 && (tag[0] == '.' || tag[0] == ':'))
                     tag = tag.Substring(1);
 
-                this.attributes = attributes ?? ExtractAttributes(ref tag, getAttributes);
+                this.attributes = attributes ?? new Dictionary<string, string>();
 
                 if (new string[] { "card" }.Contains(tag))
                 {
@@ -294,74 +432,7 @@ namespace Elements
 
                 this.text = text;
             }
-            public static Dictionary<string, string> ExtractAttributes(ref string tag, Dictionary<string, char[]> attributes)
-            {
-                string newTag = "";
-                Dictionary<string, string> result = new Dictionary<string, string>();
-
-                string? inAttribute = null;
-                bool hasChangedAttribute = false;
-
-                for (int i = 0; i < tag.Length; i++)
-                {
-                    if (TryChangeAttribute(tag[i]))
-                    {
-                        hasChangedAttribute = true;
-
-                        continue;
-                    }
-
-                    if (inAttribute != null)
-                    {
-                        if (!result.ContainsKey(inAttribute))
-                            result[inAttribute] = "";
-                        result[inAttribute] += tag[i];
-
-                        continue;
-                    }
-
-                    if (hasChangedAttribute)
-                    {
-                        // TODO: Add add line and column=index number to exception
-                        throw new CodeException($"Unexpected character outside of attribute: '{tag[i]}'.", -1);
-                    }
-
-                    newTag += tag[i];
-                }
-
-                tag = newTag;
-                return result;
-
-                bool TryChangeAttribute(char c)
-                {
-                    foreach (KeyValuePair<string, char[]> attribute in attributes)
-                    {
-                        if (inAttribute == null)
-                        {
-                            if (c == attribute.Value[0])
-                            {
-                                inAttribute = attribute.Key;
-                                return true;
-                            }
-                            continue;
-                        }
-
-                        if (c == attribute.Value[1])
-                        {
-                            if (inAttribute == attribute.Key)
-                            {
-                                inAttribute = null;
-                                return true;
-                            }
-
-                            // TODO: Add add line and column=index number to exception
-                            throw new CodeException($"Unexpected attribute closing character: '{c}'.", -1);
-                        }
-                    }
-                    return false;
-                }
-            }
-
+           
             public override string ToString()
             {
                 string result = $"<{tag}";
@@ -379,79 +450,16 @@ namespace Elements
                 }
                 result += ">";
 
-                string formattedText = FormatText(text);
-
                 // body
                 if (text != "")
-                    result += formattedText;
+                    result += text;
                 foreach (Element element in elements)
                     result += element.ToString();
                 result += $"</{tag}>";
 
                 return result;
             }
-
-            public static string FormatText(string text)
-            {
-                text = text.Replace("\\<", "&lt;").Replace("\\>", "&gt;");
-
-                string result = "";
-                string currentFormat = "";
-                int formattingDelta = 0;
-                const char FORMAT_START = '<';
-                const char FORMAT_END = '>';
-
-                for (int i = 0; i < text.Length; i++)
-                {
-                    if (text[i] == FORMAT_START)
-                    {
-                        formattingDelta++;
-
-                        if (formattingDelta == 1)
-                            continue;
-                    }
-
-                    if (text[i] == FORMAT_END)
-                    {
-                        formattingDelta--;
-
-                        if (formattingDelta < 0) // TODO: Add line and column=index number to exception
-                            throw new CodeException($"Unexpected format closing tag in line \"{text}\".", -1);
-
-                        if (formattingDelta == 0)
-                        {
-                            if (new string[] { "br", "hr", "img", "input", "meta", "link" }.Contains(currentFormat.Trim()))
-                            {
-                                result += $"<{currentFormat}>";
-                            }
-                            else
-                            {
-                                string formatTag = currentFormat.Split(' ')[0];
-                                Element element = new Element(formatTag, currentFormat.Substring(formatTag.Length).Trim());
-                                result += element.ToString();
-                            }
-
-                            currentFormat = "";
-
-                            continue;
-                        }
-                    }
-
-                    if (formattingDelta > 0)
-                    {
-                        currentFormat += text[i];
-                        continue;
-                    }
-
-                    result += text[i];
-                }
-
-                if (formattingDelta > 0)
-                    // TODO: Add line and column=index number to exception
-                    throw new CodeException("Unclosed format tag.", -1);
-
-                return result;
-            }
         }
     }
 }
+

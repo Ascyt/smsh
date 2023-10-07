@@ -51,7 +51,7 @@ public class Program
 
             File.WriteAllText(outputPath, FormatHTML(markup, HTML));
 
-            Console.WriteLine($"File has been converted to HTML at: {Path.GetFullPath(outputPath)}");
+            Console.WriteLine($"File has been compiled to HTML at: {Path.GetFullPath(outputPath)}");
         }
         catch (NotImplementedException e) { throw e; } // Just so I can quickly comment out the other exceptions
         /*catch (CodeException e)
