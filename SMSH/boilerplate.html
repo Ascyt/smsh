@@ -9,17 +9,19 @@
 
 <body>
     <div id="wrapper">
-    <nav id="sidebar">
-        <ul>
-        {{SIDEBAR}}
-        </ul>
-    </nav>
+        <nav id="sidebar">
+            <ul>
+            {{SIDEBAR}}
+            </ul>
+        </nav>
 
-    <div id="content">
-        {{BODY}}
+        <div id="content">
+            {{BODY}}
 
-        <a href="#" id="back-to-top">{{TO_TOP_TEXT}}</a>
-    </div>
+            <a href="#" id="back-to-top">{{TO_TOP_TEXT}}</a>
+
+            {{CREDIT}}
+        </div>
     </div>
 </body>
 
@@ -47,11 +49,11 @@
     margin-bottom: 10px;
     }
 
-    .light {
+    .high {
     color: {{#ff}};
     }
 
-    .dark {
+    .low {
     color: {{#80}};
     }
 
@@ -135,6 +137,10 @@
     padding: 10px;
 
     border-radius: 5px;
+    }
+
+    #credit {
+        font-size: small;
     }
 
     code {

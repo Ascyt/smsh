@@ -1,4 +1,4 @@
-:title SMSH-Documentation 
+:title SMSH-Documentation
 :theme dark
 :toTopText Back to top
 
@@ -27,9 +27,6 @@ Here you can also find the source code, together with the code used to generate 
 
 Argument 1 is for the input file, and there is an optional argument <code -o> for the output file, which defaults to <code <i filename>.html>. 
 
-For a simple way to run it on Windows you can put the <i Windows-executable> into your folder, go into that folder, press <i Windows + L>, type in <code smsh.exe ../<i your-file-here.smsh>> and hit <i Enter>. 
-Now you have a minimized HTML you can double-click to open in your web-browser!
-
 # Element syntax
 
 SMSH goes from top to bottom. Empty lines and lines containing nothing but whitespaces are completely ignored. You can define a whole element by doing <code .<i tag>>, and then writing the text body after it like this:
@@ -52,7 +49,7 @@ Alternatively, you can put everything in a line lower with one tab as indentatio
 		I am also a simple header. 
 		However, you can give me multiple lines!
 	
-This will not make linebreaks, unless you're using <code .pre>. Use <code \ > to be able to put a tab in front of your line to escape the indentation.
+This will not make linebreaks, unless you're using <code .pre>. Use <code \\> to be able to put a tab in front of your line to escape the indentation.
 
 The most common element you'll use is the normal text element, and it doesn't have a tag:
 .card
@@ -89,7 +86,7 @@ You can also nest elements:
 
 There are some elements that you can only define at the start of your page. Instead of using a <code .> character, these elements use the <code :> symbol.
 
-If you make a line that starts with a <code ,> symbol, it acts as a <code margin-bottom> (you can put the size after it, defaults to <code 16px>). 
+If you make a line that starts with a <code ,> symbol, it acts as a <code margin-bottom> (you can put the size after it, defaults to <code 16px> or <code 1> (<code 2> would be 2x margin)). 
 Lines that start with <code \>> get completely ignored and act as comments.
 > I am a comment :)
 
@@ -107,9 +104,9 @@ Attributes are applied left to right and must be after the tag. The order does n
 
 .card
 	.ul
-		.li <b(light) class> (normal braces <code (> <code )>): The class of the element. Currently there's really only <code light> and <code dark>, I might add more at some point. 
-		.li <b(light) style> (square brackets <code [> <code ]>): Custom CSS styling of the element.
-		.li <b(light) link> (curly braces <code {> <code }>): The link of the element. Used mainly for links <code .a> and images <code .img> (image source, rest of the text is alt text). When clicked, the links will open in a new tab. 
+		.li <b(high) class> (normal braces <code (> <code )>): The class of the element. Currently there's really only <code high> and <code low>, I might add more at some point. 
+		.li <b(high) style> (square brackets <code [> <code ]>): Custom CSS styling of the element.
+		.li <b(high) link> (curly braces <code {> <code }>): The link of the element. Used mainly for links <code .a> and images <code .img> (image source, rest of the text is alt text). When clicked, the links will open in a new tab. 
 		
 
 So you can embed the funny Garfield comic that I keep forgetting about like this:
@@ -125,10 +122,10 @@ Note that you don't have to include a <code .> before the element for inline.
 
 Here's an example:
 .card 
-	.pre . I'm normal. \<b I'm bold.\> \<i I'm italic.\> \<[color: yellow] I'm piss.\> \<(light) I'm light.\> \<code I'm code.\>
-	. I'm normal. <b I'm bold.> <i I'm italic.> <[color: yellow] I'm piss.> <(light) I'm light.> <code I'm code.>
+	.pre . I'm normal. \<b I'm bold.\> \<i I'm italic.\> \<[color: yellow] I'm piss.\> \<(high) I'm high.\> \<code I'm code.\>
+	. I'm normal. <b I'm bold.> <i I'm italic.> <[color: yellow] I'm piss.> <(high) I'm high.> <code I'm code.>
 
-.(dark) Hint: Put a <code \ > before <code \<> or <code \>> to escape them and write them as normal characters.
+.(low) Hint: Put a <code \\> before <code \<> or <code \>> to escape them and write them as normal characters.
 
 # Sections
 You can define a section by having a line starting with a <code #> symbol. 
@@ -151,8 +148,8 @@ SMSH supports pretty much every HTML tag out there, to some degree at least. How
 	.h3 Header 3 <code .h3>
 	.h4 Header 4 <code .h4>
 	. Normal text <code .>/<code >
-	.(light) Light text <code .(light)>
-	.(dark) Dark text <code .(dark)>
+	.(high) high text <code .(high)>
+	.(low) low text <code .(low)>
 	.a{https://ascyt.com/} Link <code a{"https://..."}>
 	.code code .code
 		
@@ -210,34 +207,38 @@ SMSH supports pretty much every HTML tag out there, to some degree at least. How
 				.td row
 				.td data
 		.pre 
-			\.table 
-			\	.tr
-			\		.th table
-			\		.th row
-			\		.th header
-			\	.tr 
-			\		.td table
-			\		.td row
-			\		.td data
-			\\> ...
+			.table 
+				.tr
+					.th table
+					.th row
+					.th header
+				.tr 
+					.td table
+					.td row
+					.td data
+			\> ...
 			
 			
 	.card
 		. Card <code .card>
 
-And here are the only two current special components that have to be put at the start of the page and start with <code :>:
+# Special element list
 .card 
 	.ul
 		.li 
-			. <b(light) title>: Set the title of the document. 
+			. <b(high) title> <i (Untitled)>: Set the title of the document. 
 			.h4 Here: 
 			.pre :title SMSH-Documentation
 		.li 
-			. <b(light) header>: Set the top part of the document. 
+			. <b(high) theme> <i (dark)>: Set the colors of the document, either <code light> or <code dark>. 
 			.h4 Here:
-			.pre
-				\:header
-				\	.h1 SMSH Documentation
+			.pre :theme dark
+		.li 
+			. <b(high) toTopText> <i Back to top>: Set the text shown at the button at the bottom that gets you back to the start of the page. 
+			.h4 Here:
+			.pre :toTopText Back to top
+		.li 
+			. <b(high) hideCredit>: Removes the message shown at the bottom of the page.  
 
 # Notes
 
