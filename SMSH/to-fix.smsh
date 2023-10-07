@@ -1,0 +1,24 @@
+:title To fix
+
+# Bugs
+
+.ul 
+	.li Header: p/h1 margin too low
+	.li Section name <code Hello <i (world)>> without space
+	.li Completely empty lines should get ignored when indented 
+	.li Double space before \< and \> get rendered as one
+	.li Multiple sections overlap (should name like "-[index]")
+	.li Change <code (light)> =\> <code (high)> and <code (dark)> =\> <code (low)> 
+	.li <code .pre> indent too much
+
+# Features
+
+.ul
+	.li Faster <code ul>/<code ol> (<code .uli> & <code oli>)
+	.li Faster <code table> (<code row>)
+	.li Exceptions have line number and column
+	.li Background color
+	.li Custom classes
+	.li <code ..> for previous element
+	.li <code :font>
+	.li <code :margin> default margin length
