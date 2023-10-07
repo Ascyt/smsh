@@ -16,6 +16,7 @@ namespace Elements
         public string? title;
         public bool isLightTheme = false;
         public string toTopText = "Back to top";
+        public bool credit = true;
 
         public readonly static Dictionary<string, char[]> getAttributes = new Dictionary<string, char[]>()
             {
@@ -135,21 +136,18 @@ namespace Elements
                     case '#': // Section
                         throw new CodeException("Section can't be defined in elements.", i, indents);
                     case ':': // Special tag
-                        /*if (indents > 0)
-                            throw new CodeException("Special tags can't be defined in elements.", i, indents);*/
-
                         if (currentSection != null)
                             throw new CodeException("Special tag must be defined above all sections.", i);
 
-                        switch (line.Split(' ')[0])
+                        switch (line.Split(' ')[0].Substring(1).ToLower())
                         {
-                            case ":title":
+                            case "title":
                                 if (title != null)
                                     throw new CodeException("Title already defined.", i);
 
                                 title = line.Substring(7).Trim();
                                 return null;
-                            case ":theme":
+                            case "theme":
                                 string[] light = {"light", "l"};
                                 string[] dark = {"dark", "d"};
 
@@ -162,9 +160,11 @@ namespace Elements
 
                                 isLightTheme = isLight;
                                 return null;
-                            case ":totoptext":
-                            case ":toTopText":
+                            case "totoptext":
                                 toTopText = line.Substring(11).Trim();
+                                return null;
+                            case "hidecredit":
+                                credit = false;
                                 return null;
                             default:
                                 throw new CodeException("Invalid special tag.", i);
@@ -299,7 +299,7 @@ namespace Elements
         
         public static string FormatText(string text, int indents, int lineIndex)
         {
-            text = text.Replace("\\<", "&lt;").Replace("\\>", "&gt;");
+            text = text.Replace("\\\\", "&#92;").Replace("\\<", "&lt;").Replace("\\>", "&gt;");
 
             string result = "";
             string currentFormat = "";
