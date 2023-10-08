@@ -29,7 +29,7 @@ namespace Elements
                     result[inAttribute] += trimmedLine[i];
 
                     continue;
-                }
+                }   
 
                 if (trimmedLine[i] == ' ')
                 {
