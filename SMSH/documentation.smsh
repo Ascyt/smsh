@@ -3,7 +3,6 @@
 :toTopText Back to top
 
 # What is SMSH? 
-
 .ul
 	.li TestA
 	.li TestB
@@ -104,7 +103,7 @@ Attributes are applied left to right and must be after the tag. The order does n
 
 .card
 	.ul
-		.li <b(high) class> (normal braces <code (> <code )>): The class of the element. Currently there's really only <code high> and <code low>, I might add more at some point. 
+		.li <b(high) class> (normal braces <code (> <code )>): The class of the element. By default there's <code high> and <code low>. Here you can use your <a{#6} custom classes>. 
 		.li <b(high) style> (square brackets <code [> <code ]>): Custom CSS styling of the element.
 		.li <b(high) link> (curly braces <code {> <code }>): The link of the element. Used mainly for links <code .a> and images <code .img> (image source, rest of the text is alt text). When clicked, the links will open in a new tab. 
 		
@@ -144,9 +143,9 @@ Elements must be under sections, and special elements (starting with <code :>) m
 You can create custom CSS classes using the <code $> prefix. Here is an example:
 
 .pre
-	$myCustomClass
-		color: green;
-		font-size: large;
+	. $myCustomClass
+	. 	color: green;
+	. 	font-size: large;
 
 Everything indented is part of the CSS class. You must define CSS classes before sections, and they must not be defined twice (case sensitive).
 

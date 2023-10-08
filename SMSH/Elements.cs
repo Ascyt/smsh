@@ -70,6 +70,7 @@ namespace Elements
                 }
             }
 
+
             Element? GetElement(string line, ref int i, int indents)
             {
                 string trimmedLine = line.TrimStart();
@@ -79,7 +80,7 @@ namespace Elements
 
                 if (!KEYWORD_CHARS.Contains(trimmedLine[0]))
                 {
-                    return GetElement(". " + line, ref i, indents);
+                    return GetElement(line.Insert(indents, ". "), ref i, indents);
                 }
 
 
@@ -175,7 +176,7 @@ namespace Elements
                         break;
                 }
 
-                Element element = new Element(tag, trimmedLine.Length == tag.Length ? "" : trimmedLine.Substring(tag.Length + 1), attributes);
+                Element element = new Element(tag, trimmedLine.Length == tag.Length + 1 ? "" : trimmedLine.Substring(tag.Length + 2), attributes);
 
                 i++;
 
@@ -188,7 +189,7 @@ namespace Elements
                 {
                     if (lines[i].Trim().Length > 0)
                     {
-                        string newElementTag = lines[i].TrimStart().Split(' ')[0];
+                        string newElementTag = lines[i].Substring(actualIndents).Split(' ')[0];
 
                         switch (newElementTag[0])
                         {

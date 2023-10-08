@@ -14,7 +14,7 @@ namespace Elements
 
             public Element(string tag, string text = "", Dictionary<string, string>? attributes = null)
             {
-                if (tag.Length > 0 && (tag[0] == '.' || tag[0] == ':'))
+                if (tag.Length > 0 && tag[0] == '.')
                     tag = tag.Substring(1);
 
                 this.attributes = attributes ?? new Dictionary<string, string>();
@@ -57,7 +57,7 @@ namespace Elements
 
                     result += $" {attribute.Key}=\"{attribute.Value}\"";
 
-                    if (attribute.Key == "href")
+                    if (attribute.Key == "href" && attribute.Value[0] != '#')
                         result += " target=\"_blank\"";
                 }
                 result += ">";
