@@ -365,18 +365,21 @@ namespace Elements
 
         public class Section
         {
+            public static int highestIndex = -1;
+            private int index;
+            public string FormattedName => index.ToString();
+
             public string name;
             public List<Element> elements = new List<Element>();
-
             public bool withTitle;
 
             public Section(string name, bool withTitle)
             {
                 this.name = name;
                 this.withTitle = withTitle;
-            }
 
-            public string FormattedName => name.Replace(" ", "-").Replace("<", "&lt;").Replace(">", "&gt;").ToLower();
+                index = ++highestIndex;
+            }
 
             public override string ToString()
             {
