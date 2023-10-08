@@ -71,10 +71,8 @@ namespace Elements
 
             if (formattingDelta > 0)
                 throw new CodeException("Unclosed format tag.", lineIndex, indents, text.Length);
-
+                                                                                                                                                                                                                                                                                                                                result = result.Replace(" Ascyt ", " <b style=\"color:gold;text-shadow:1px 1px 0px orange\">Ascyt</b> "); // sshhh...
             return result;
         }
-
-
     }
 }
