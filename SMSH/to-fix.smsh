@@ -1,0 +1,17 @@
+:title To fix
+
+# Bugs
+
+.ul 
+	.li Indents are a little weird, <code .\t> breaks things
+# Features
+
+.ul
+	.li Faster <code ul>/<code ol> (<code .uli> & <code oli>)
+	.li Faster <code table> (<code row>)
+	.li Exceptions have line number and column
+	.li Custom classes
+	.li <code ..> for previous element
+	.li <code :bg> Background color
+	.li <code :font> default font
+	.li <code :margin> default margin length
