@@ -123,8 +123,8 @@ Note that you don't have to include a <code .> before the element for inline.
 
 Here's an example:
 .card 
-	.pre . I'm normal. \<b I'm bold.\> \<i I'm italic.\> \<[color: yellow] I'm piss.\> \<(high) I'm high.\> \<code I'm code.\>
-	. I'm normal. <b I'm bold.> <i I'm italic.> <[color: yellow] I'm piss.> <(high) I'm high.> <code I'm code.>
+	.pre . I'm normal. \<b I'm bold.\> \<i I'm italic.\> \<[color: yellow] I'm piss.\> \<(high) I'm high priority.\> \<code I'm code.\>
+	. I'm normal. <b I'm bold.> <i I'm italic.> <[color: yellow] I'm piss.> <(high) I'm high priority.> <code I'm code.>
 
 .(low) Hint: Put a <code \\> before <code \<> or <code \>> to escape them and write them as normal characters.
 
