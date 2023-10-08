@@ -72,6 +72,5 @@ namespace Elements
                 return result;
             }
         }
-    
     }
 }
