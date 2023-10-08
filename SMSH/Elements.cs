@@ -10,13 +10,14 @@ namespace Elements
 {
     public partial class Elements
     {
-        public const string KEYWORD_CHARS = ".,>#:";
+        public const string KEYWORD_CHARS = ".,>#:$";
 
-        public List<Section> sections = new List<Section>();
+        public List<Section> sections = new();
         public string? title;
         public bool isLightTheme = false;
         public string toTopText = "Back to top";
         public bool credit = true;
+        public Dictionary<string, string> customClasses = new();
 
         public readonly static Dictionary<string, char[]> getAttributes = new Dictionary<string, char[]>()
             {
@@ -115,6 +116,8 @@ namespace Elements
                     return imageElement;
                 }
 
+                string? customClass = null;
+
                 switch (trimmedLine[0])
                 {
                     case ',': // Margin
@@ -170,6 +173,18 @@ namespace Elements
                             default:
                                 throw new CodeException("Invalid special tag.", i);
                         }
+                    case '$': // Custom class
+                        if (currentSection != null)
+                            throw new CodeException("Custom CSS class must be defined above all sections.", i);
+
+                        customClass = trimmedLine.Substring(1).Trim();
+
+                        if (customClasses.ContainsKey(trimmedLine.Substring(1).Trim()))
+                            throw new CodeException($"Custom CSS class \"{customClass}\" already defined.", i);
+
+                        customClasses[customClass] = "";
+
+                        break;
                     default:
                         if (currentSection == null)
                             throw new CodeException("No section defined.", i);
@@ -195,9 +210,15 @@ namespace Elements
                         {
                             case '>': // Comment
                                 break;
-                            case '\\':
                             default: // Tag, Text, Margin
+                                if (customClass != null)
+                                {
+                                    customClasses[customClass] += lines[i].Trim();
+                                    break;
+                                }
+
                                 TryAddElement(GetElement(lines[i], ref i, indents + 1), element.elements);
+
                                 break;
                         }
                     }

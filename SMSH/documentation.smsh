@@ -2,10 +2,11 @@
 :theme dark
 :toTopText Back to top
 
+$myCustomClass
+	color: green;
+	font-size: medium;
+
 # What is SMSH? 
-.ul
-	.li TestA
-	.li TestB
 
 SMSH stands for <b Simple Markup for Styled HTML>. 
 It is essentially a fast and easy markup language used to write a pretty and structured HTML document.
@@ -48,8 +49,6 @@ Alternatively, you can put everything in a line lower with one tab as indentatio
 		I am also a simple header. 
 		However, you can give me multiple lines!
 	
-This will not make linebreaks, unless you're using <code .pre>. Use <code \\> to be able to put a tab in front of your line to escape the indentation.
-
 The most common element you'll use is the normal text element, and it doesn't have a tag:
 .card
 	.pre . I am a normal text.
@@ -65,6 +64,9 @@ Unless it's a child of an element, you can even leave the <code .> away:
 	> Have to do it here since it's a child of .card :)
 	
 Or you could choose to have your element be only text, in which case you don't need <code .>.
+
+By default text makes linebreaks, however if you put a <code \\> at the end of your line, there will not be a linebreak set. \
+Just like in HTML, you can also set linebreaks manually using <code \<br\>>.
 
 You can also nest elements:
 .card 
@@ -145,7 +147,7 @@ You can create custom CSS classes using the <code $> prefix. Here is an example:
 .pre
 	. $myCustomClass
 	. 	color: green;
-	. 	font-size: large;
+	. 	font-size: medium;
 
 Everything indented is part of the CSS class. You must define CSS classes before sections, and they must not be defined twice (case sensitive).
 
@@ -254,11 +256,5 @@ SMSH supports pretty much every HTML tag out there, to some degree at least. How
 
 # Notes
 
-I wrote this entire thing in around 3 days, so it may contain some bugs or be incomplete. 
-I'm probably not going to touch this much anymore, so if there's something that's bothering you, feel free to fork this project's repository. 
-The code really ain't the prettiest, it's almost 500 lines long and includes the HTML, but I guess it's as much as you can expect from a teenager student.
-,
-I made this mostly for writing notes in school, but hey, why not publish it. I'm a 16 year old programmer from Austria and you can learn more about me on my <a{https://ascyt.com/} website>. 
+I made this mostly for writing notes in school, but hey, why not publish it. I'm a 16 year old programmer from Austria and you can learn more about me on my <a{https://ascyt.com/} website>. I'm looking forward to adding more features, check <code to-fix.html> in the repo for things I'm planning on!
 Thanks for checking this smaller project out!
-
-When you write the word Ascyt it becomes golden :))))
