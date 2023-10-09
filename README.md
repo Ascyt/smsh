@@ -5,3 +5,5 @@ Open SMSH/documentation.html or visit <a href="https://ascyt.com/projects/smsh" 
 ![documentation in dark theme](./Screenshots/dark.png)
 #### Light theme
 ![documentation in light theme](./Screenshots/light.png)
+#### Code
+![VS-Code screenshot of documentation code](./Screenshots/code.png)
