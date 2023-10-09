@@ -179,13 +179,13 @@ SMSH supports pretty much every HTML tag out there, to some degree at least. How
 				.ul 
 					.li nested
 		.pre 
-			\.ul
-			\	.li 
-			\		. unordered list
-			\	.li 
-			\		. unordered list
-			\		.ul 
-			\			.li nested
+			. .ul
+			. 	.li 
+			. 		. unordered list
+			. 	.li 
+			. 		. unordered list
+			. 		.ul 
+			. 			.li nested
 		
 	
 	.card
@@ -193,9 +193,9 @@ SMSH supports pretty much every HTML tag out there, to some degree at least. How
 			.li ordered list
 			.li ordered list
 		.pre 
-			\.ol
-			\	.li ordered list
-			\	.li ordered list
+			. .ol
+			. 	.li ordered list
+			. 	.li ordered list
 					
 				
 	.card
@@ -221,16 +221,16 @@ SMSH supports pretty much every HTML tag out there, to some degree at least. How
 				.td row
 				.td data
 		.pre 
-			.table 
-				.tr
-					.th table
-					.th row
-					.th header
-				.tr 
-					.td table
-					.td row
-					.td data
-			\> ...
+			. .table 
+			. 	.tr
+			. 		.th table
+			. 		.th row
+			. 		.th header
+			. 	.tr 
+			. 		.td table
+			. 		.td row
+			. 		.td data
+			. \> ...
 			
 			
 	.card
