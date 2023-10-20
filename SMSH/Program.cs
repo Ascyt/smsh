@@ -18,7 +18,7 @@ public class Program
         {
             this.line = line;
             if (column != null || indents != null)
-                this.column = (column ?? 0) + (indents ?? 0);
+                this.column = (column ?? 0) + Elements.Elements.GetIndentIndex(indents ?? 0);
         }
 
         public override string ToString()
