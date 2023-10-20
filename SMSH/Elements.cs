@@ -18,8 +18,9 @@ namespace Elements
         public string toTopText = "Back to top";
         public bool credit = true;
         public Dictionary<string, string> customClasses = new();
+        public static int spaces = 0; // Amount of spaces used for indentation. 0 = tab
 
-        public readonly static Dictionary<string, char[]> getAttributes = new Dictionary<string, char[]>()
+        private readonly static Dictionary<string, char[]> getAttributes = new Dictionary<string, char[]>()
             {
                 {"class", new char[2] { '(', ')' }},
                 {"style", new char[2] { '[', ']' }},
@@ -49,11 +50,19 @@ namespace Elements
                         currentSection = new Section(line.Substring(1).Trim(), true);
                         break;
                     case '\t':
+                        if (spaces != 0)
+                        {
+                            throw new CodeException($"Invalid indentation (expected {spaces} spaces, not tabs)", i, 0);
+                        }
                         if (line.Trim() != "")
                             throw new CodeException("Too large amount of indentation (expected none).", i, 0);
                         break;
                     case ' ':
-                        throw new CodeException("Invalid indentation (expected tab, not space).", i, 0);
+                        if (spaces == 0)
+                        {
+                            throw new CodeException("Invalid indentation (expected tab, not space).", i, 0);
+                        }
+                        break;
                     default:
                         TryAddElement(GetElement(line, ref i, 0), currentSection?.elements);
                         break;
@@ -74,14 +83,17 @@ namespace Elements
 
             Element? GetElement(string line, ref int i, int indents)
             {
-                string trimmedLine = line.TrimStart();
+                string trimmedLine = line.Substring(GetIndentIndex(indents));
 
-                if (trimmedLine.Length == 0 || trimmedLine[0] == '>')
+                if (trimmedLine.TrimStart().Length == 0 || trimmedLine[0] == '>')
                     return null;
+
+                if ("\t ".Contains(trimmedLine[0]))
+                    throw new CodeException($"Invalid indentation (expected {indents}).", i, indents);
 
                 if (!KEYWORD_CHARS.Contains(trimmedLine[0]))
                 {
-                    return GetElement(line.Insert(indents, ". "), ref i, indents);
+                    return GetElement(line.Insert(GetIndentIndex(indents), ". "), ref i, indents);
                 }
 
 
@@ -170,6 +182,9 @@ namespace Elements
                             case "hidecredit":
                                 credit = false;
                                 return null;
+                            case "spaces":
+                                spaces = int.Parse(line.Substring(7).Trim());
+                                return null;
                             default:
                                 throw new CodeException("Invalid special tag.", i);
                         }
@@ -204,23 +219,13 @@ namespace Elements
                 {
                     if (lines[i].Trim().Length > 0)
                     {
-                        string newElementTag = lines[i].Substring(actualIndents).Split(' ')[0];
-
-                        switch (newElementTag[0])
+                        if (customClass != null)
                         {
-                            case '>': // Comment
-                                break;
-                            default: // Tag, Text, Margin
-                                if (customClass != null)
-                                {
-                                    customClasses[customClass] += lines[i].Trim();
-                                    break;
-                                }
-
-                                TryAddElement(GetElement(lines[i], ref i, indents + 1), element.elements);
-
-                                break;
+                            customClasses[customClass] += lines[i].Trim();
+                            break;
                         }
+
+                        TryAddElement(GetElement(lines[i], ref i, actualIndents), element.elements);
                     }
 
                     i++;
@@ -236,15 +241,28 @@ namespace Elements
 
                 int ActualIndents(string text)
                 {
-                    for (int i = 0; i < text.Length; i++)
+                    if (spaces == 0)
                     {
-                        if (text[i] != '\t')
-                            return i;
+                        for (int i = 0; i < text.Length; i++)
+                        {
+                            if (text[i] != '\t')
+                                return i;
+                        }
+                    }
+                    else
+                    {
+                        int i = 0;
+                        while (i < text.Length && text[i] == ' ')
+                            i += spaces;
+                        return i / spaces;
                     }
                     return text.Length;
                 }
             }
         }
+
+        public static int GetIndentIndex(int indents)
+            => spaces == 0 ? indents : indents * spaces;
     }
 }
 
