@@ -8,7 +8,6 @@ Here are some bug fixes/features I'm working to fix, in no particular order.
 
 .ul 
 	.li Indents are a little weird, <code .\\t> breaks things
-	.li Doesn't work well on mobile (sidebar should be expandable with <code \>\>> button)
 	.li Don't force elements after sections <(low) (maybe? feedback appreciated!)>
 
 # Features
@@ -22,6 +21,7 @@ Here are some bug fixes/features I'm working to fix, in no particular order.
 	.li config.smsh file in smsh directory, accesses this before all other SMSH files (default values by default)
 	.li Tabs using <code @> character (like sections)
 	.li Override default CSS using <code %> character (same as <code $>, but without <code .> (no class))
+	.li <code \\[string] [replacement]> replacement <(low) (<code \\a b> replaces all instances of <code \\a> with <code b>)>. Longer strings have priority
 	,
 	.li <code :favicon> directory/website to favicon
 	.li <code :bg> Background color
