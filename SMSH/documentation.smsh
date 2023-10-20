@@ -256,7 +256,7 @@ SMSH supports pretty much every HTML tag out there, to some degree at least. How
             . <b(high) hideCredit><(low) :> Removes the message shown at the bottom of the page.  
         .li 
             . <b(high) spaces> 0<(low) :> Tells the compiler to use spaces as a substitute for tabs. Put a number after <code :spaces> to specify the amount, (4 if you're using Visual Studio Code).
-			.h4 Here:
+            .h4 Here:
             .pre :spaces 4
 
 # Notes
