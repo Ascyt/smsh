@@ -19,6 +19,7 @@ namespace Elements
         public bool credit = true;
         public Dictionary<string, string> customClasses = new();
         public static int spaces = 0; // Amount of spaces used for indentation. 0 = tab
+        public string font = "Arial";
 
         private readonly static Dictionary<string, char[]> getAttributes = new Dictionary<string, char[]>()
             {
@@ -183,6 +184,9 @@ namespace Elements
                                 return null;
                             case "spaces":
                                 spaces = int.Parse(line.Substring(7).Trim());
+                                return null;
+                            case "font":
+                                font = line.Substring(5).Trim();
                                 return null;
                             default:
                                 throw new CodeException("Invalid special tag.", i);

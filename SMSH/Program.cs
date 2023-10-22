@@ -111,7 +111,8 @@ public class Program
             .Replace("{{BODY}}", body)
             .Replace("{{TO_TOP_TEXT}}", elements.toTopText)
             .Replace("{{CREDIT}}", elements.credit ? CREDIT : "")
-            .Replace("{{CUSTOM_STYLES}}", customStyles);
+            .Replace("{{CUSTOM_STYLES}}", customStyles)
+            .Replace("{{FONT}}", elements.font);
     }
 
     // minified credit

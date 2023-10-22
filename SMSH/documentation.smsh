@@ -246,24 +246,28 @@ SMSH supports pretty much every HTML tag out there, to some degree at least. How
 .card 
     .ul
         .li 
-            . <b(high) title> (Untitled)<(low) :> Set the title of the document. 
+            . <b(high) title> (title)<(low) :> Set the title of the document. 
             .h4 Here: 
             .pre :title SMSH-Documentation
         .li 
-            . <b(high) theme> (dark)<(low) :> Set the colors of the document, either <code light> or <code dark>. 
+            . <b(high) theme> (theme)<(low) :> Set the colors of the document, either <code light> or <code dark>. 
             .h4 Here:
             .pre :theme dark
         .li 
-            . <b(high) toTopText> Back to top<(low) :> Set the text shown when hovering over the "^" button at the bottom right of the screen.
+            . <b(high) toTopText> text<(low) :> Set the text shown when hovering over the <code ^> button at the bottom right of the screen.
             .pre :toTopText Back to top
         .li 
             . <b(high) hideCredit><(low) :> Removes the message shown at the bottom of the page.  
         .li 
-            . <b(high) spaces> 0<(low) :> Tells the compiler to use spaces as a substitute for tabs. Put a number after <code :spaces> to specify the amount, (4 if you're using Visual Studio Code).
+            . <b(high) spaces> amount<(low) :> Tells the compiler to use spaces as a substitute for tabs. Put a number after <code :spaces> to specify the amount, (4 if you're using Visual Studio Code).
             .h4 Here:
             .pre :spaces 4
+        .li 
+            . <b(high) font> font<(low) :> The CSS font that gets used. 
+            .h4 Here:
+            .pre :font Arial
 
 # Notes
 
 I made this mostly for writing notes in school, but hey, why not publish it. I'm a 16 year old programmer from Austria and you can learn more about me on my <a{https://ascyt.com/} website>. I'm looking forward to adding more features, check <code to-fix.html> in the repo for things I'm planning on!
-Thanks for checking this smaller project out!
+Thanks for checking this smaller project out :)
