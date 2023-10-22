@@ -19,12 +19,15 @@
         </nav>
 
         <div id="content">
+          <div class="mobilemargin"></div>
             {{BODY}}
 
-            <a href="#" id="back-to-top">{{TO_TOP_TEXT}}</a>
-
             {{CREDIT}}
+          <div class="mobilemargin"></div>
         </div>
+
+
+        <button onclick="topFunction()" id="topBtn" title="{{TO_TOP_TEXT}}">^</button>
     </div>
 </body>
 
@@ -145,8 +148,32 @@
     border-radius: 5px;
     }
 
+  #topBtn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    border: none;
+    outline: none;
+    background-color: {{#20}};
+    color: white;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 18px;
+    line-height: 40px;
+    transition: ease-out 0.3s;
+  }
+
+  #topBtn:hover {
+    background-color: {{#40}};
+    transition: ease-out 0.2s;
+  }
+
     #credit {
         font-size: small;
+        line-height: 20px;
     }
 
     code {
@@ -284,29 +311,6 @@
     transition: ease-in 0.1s;
     }
 
-    #back-to-top {
-    border-color: {{#80}};
-    border-radius: 5px;
-    border-width: 2px;
-    border-style: solid;
-
-    margin-top: 10px;
-
-    display: flex;
-    justify-content: center;
-
-    background-color: {{#10}};
-    color: {{#c0}};
-    text-decoration: none;
-
-    transition: ease-out 0.3s;
-    }
-
-    #back-to-top:hover {
-    background-color: {{#30}};
-    transition: ease-in-out 0.2s;
-    }
-
     {{CUSTOM_STYLES}}
 </style>
 
@@ -317,12 +321,30 @@ window.mobileCheck = function() {
   return check;
 };
 
+
+window.onscroll = function() {scrollFunction()};
+
+const topBtn = document.getElementById("topBtn");
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) { 
+    topBtn.style.marginRight = "0";
+  } else { 
+    topBtn.style.marginRight = "-100px";
+  }
+}
+
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+
 const isMobile = mobileCheck();
 
 const sidebar = document.getElementById('sidebar');
 const content = document.getElementById('content');
 const hamburger = document.getElementById('hamburger');
 const closebtn = document.getElementsByClassName('closebtn')[0];
+const mobilemargins = document.getElementsByClassName('mobilemargin');
 
 if (isMobile) {
     sidebar.classList.add('mobile');
@@ -330,6 +352,8 @@ if (isMobile) {
     hamburger.classList.add('mobile');  
 
     hamburger.style.display = 'block';
+    for (let mobilemargin of mobilemargins)
+      mobilemargin.style.paddingBottom = '60px';
     closeNav();
 }
 

@@ -254,8 +254,7 @@ SMSH supports pretty much every HTML tag out there, to some degree at least. How
             .h4 Here:
             .pre :theme dark
         .li 
-            . <b(high) toTopText> Back to top<(low) :> Set the text shown at the button at the bottom that gets you back to the start of the page. 
-            .h4 Here:
+            . <b(high) toTopText> Back to top<(low) :> Set the text shown when hovering over the "^" button at the bottom right of the screen.
             .pre :toTopText Back to top
         .li 
             . <b(high) hideCredit><(low) :> Removes the message shown at the bottom of the page.  
