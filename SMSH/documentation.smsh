@@ -7,12 +7,7 @@
 $myCustomClass
     color: green;
     font-size: medium;
-
-This is a test.
-.ul
-    .li Element
-    .li Element2
-
+	
 # What is SMSH? 
 
 SMSH stands for <b Simple Markup for Styled HTML>. 

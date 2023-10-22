@@ -50,18 +50,16 @@ namespace Elements
 
                         currentSection = new Section(line.Substring(1).Trim(), true);
                         break;
-                    case '\t':
-                        if (spaces != 0)
-                        {
-                            throw new CodeException($"Invalid indentation (expected {spaces} spaces, not tabs)", i, 0);
-                        }
-                        if (line.Trim() != "")
-                            throw new CodeException("Too large amount of indentation (expected none).", i, 0);
-                        break;
                     case ' ':
-                        if (spaces == 0)
+                    case '\t':
+                        if (line.Length == 0 || line.Trim() == "")
+                            break;
+
+                        bool usingCorrect = spaces == 0 ? (line[0] == '\t') : (line[0] == ' ');
+
+                        if (!usingCorrect)
                         {
-                            throw new CodeException("Invalid indentation (expected tab, not space).", i, 0);
+                            throw new CodeException(spaces == 0 ? $"Invalid indentation (expected tabs, not spaces)" : $"Invalid indentation (expected {spaces} spaces, not tabs)", i, 0);
                         }
                         break;
                     default:
