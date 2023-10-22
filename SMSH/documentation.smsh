@@ -2,6 +2,7 @@
 :theme dark
 :toTopText Back to top
 :spaces 4
+:favicon https://www.ascyt.com/projects/smsh/favicon.ico
 
 $myCustomClass
     color: green;
@@ -266,6 +267,10 @@ SMSH supports pretty much every HTML tag out there, to some degree at least. How
             . <b(high) font> font<(low) :> The CSS font that gets used. 
             .h4 Here:
             .pre :font Arial
+        .li 
+            . <b(high) favicon> href<(low) :> Link to the favicon (the icon text to the document title).
+            .h4 Here:
+            .pre :favicon https://www.ascyt.com/projects/smsh/favicon.ico
 
 # Notes
 

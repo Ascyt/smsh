@@ -20,6 +20,7 @@ namespace Elements
         public Dictionary<string, string> customClasses = new();
         public static int spaces = 0; // Amount of spaces used for indentation. 0 = tab
         public string font = "Arial";
+        public string favicon = @"https://www.ascyt.com/projects/smsh/favicon.ico";
 
         private readonly static Dictionary<string, char[]> getAttributes = new Dictionary<string, char[]>()
             {
@@ -187,6 +188,9 @@ namespace Elements
                                 return null;
                             case "font":
                                 font = line.Substring(5).Trim();
+                                return null;
+                            case "favicon":
+                                favicon = line.Substring(8).Trim();
                                 return null;
                             default:
                                 throw new CodeException("Invalid special tag.", i);
