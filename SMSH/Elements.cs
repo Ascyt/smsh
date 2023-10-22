@@ -30,7 +30,7 @@ namespace Elements
 
         public Elements(string markup)
         {
-            Section? currentSection = null;
+            Section currentSection = new(null, false);
 
             // Go through each line
             string[] lines = markup.Split('\n');
@@ -44,8 +44,7 @@ namespace Elements
                 switch (line[0])
                 {
                     case '#': // Section
-                        if (currentSection != null)
-                            sections.Add(currentSection);
+                        sections.Add(currentSection);
 
                         currentSection = new Section(line.Substring(1).Trim(), true);
                         break;
@@ -152,7 +151,7 @@ namespace Elements
                     case '#': // Section
                         throw new CodeException("Section can't be defined in elements.", i, indents);
                     case ':': // Special tag
-                        if (currentSection != null)
+                        if (sections.Count > 1)
                             throw new CodeException("Special tag must be defined above all sections.", i);
 
                         switch (line.Split(' ')[0].Substring(1).ToLower())
@@ -189,7 +188,7 @@ namespace Elements
                                 throw new CodeException("Invalid special tag.", i);
                         }
                     case '$': // Custom class
-                        if (currentSection != null)
+                        if (sections.Count > 1)
                             throw new CodeException("Custom CSS class must be defined above all sections.", i);
 
                         customClass = trimmedLine.Substring(1).Trim();
@@ -199,10 +198,8 @@ namespace Elements
 
                         customClasses[customClass] = "";
 
-                        break;
+                        return null;
                     default:
-                        if (currentSection == null)
-                            throw new CodeException("No section defined.", i);
                         break;
                 }
 

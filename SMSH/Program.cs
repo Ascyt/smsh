@@ -27,6 +27,8 @@ public class Program
         }
     }
 
+    public const bool USE_BOILERPLATE_FILE = true;
+
     public static void Main(string[] args)
     {
         if (args.Length == 0)
@@ -49,7 +51,7 @@ public class Program
 
             string markup = File.ReadAllText(filePath).Replace("\r", "");
 
-            File.WriteAllText(outputPath, FormatHTML(markup, HTML));
+            File.WriteAllText(outputPath, FormatHTML(markup, USE_BOILERPLATE_FILE ? File.ReadAllText("./boilerplate.html") : HTML));
 
             Console.WriteLine($"File has been compiled to HTML at: {Path.GetFullPath(outputPath)}");
         }
@@ -72,6 +74,9 @@ public class Program
         string sidebar = "";
         foreach (Elements.Elements.Section section in elements.sections)
         {
+            if (section.name == null)
+                continue;
+
             sidebar += $"<li><a href=\"#{section.FormattedName}\" onclick=\"sectionClick({section.FormattedName})\">{section.name}</a></li>";
         }
 
