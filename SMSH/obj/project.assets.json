@@ -8,19 +8,24 @@
     "net7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\filip\\.nuget\\packages\\": {}
+    "C:\\Users\\FamZauner\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\filip\\source\\repos\\SMSH\\SMSH\\SMSH.csproj",
+      "projectUniqueName": "C:\\Users\\FamZauner\\Documents\\SMSH\\SMSH\\SMSH.csproj",
       "projectName": "SMSH",
-      "projectPath": "C:\\Users\\filip\\source\\repos\\SMSH\\SMSH\\SMSH.csproj",
-      "packagesPath": "C:\\Users\\filip\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\filip\\source\\repos\\SMSH\\SMSH\\obj\\",
+      "projectPath": "C:\\Users\\FamZauner\\Documents\\SMSH\\SMSH\\SMSH.csproj",
+      "packagesPath": "C:\\Users\\FamZauner\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\FamZauner\\Documents\\SMSH\\SMSH\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\filip\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\FamZauner\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -61,7 +66,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400-preview.23330.10\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
       }
     }
   }

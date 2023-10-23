@@ -1,0 +1,5 @@
+C:\Users\FamZauner\Documents\SMSH\Windows-exe\SMSH.exe
+C:\Users\FamZauner\Documents\SMSH\Windows-exe\SMSH.dll
+C:\Users\FamZauner\Documents\SMSH\Windows-exe\SMSH.deps.json
+C:\Users\FamZauner\Documents\SMSH\Windows-exe\SMSH.runtimeconfig.json
+C:\Users\FamZauner\Documents\SMSH\Windows-exe\SMSH.pdb
