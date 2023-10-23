@@ -28,7 +28,7 @@
         </div>
 
 
-        <button onclick="topFunction()" id="topBtn" title="{{TO_TOP_TEXT}}">&#x1F781;</button>
+        <button onclick="topFunction()" id="topBtn" title="{{TO_TOP_TEXT}}">&#x2B71;</button>
     </div>
 </body>
 
@@ -268,12 +268,25 @@
     margin: 0;
     }
 
-    #sidebar ul li a {
+    #sidebar .sidebar-item a {
     display:block;
-    color: {{#ff}};
     text-decoration: none;
     padding: 10px;
     text-align: center;
+    }
+
+    #sidebar a {
+    color: {{#c0}};
+    transition: ease-out 0.2s;
+    }
+    #sidebar .selected a {
+    font-size: larger;
+    color: {{#ff}};
+    transition: ease-out 0.3s;
+    }
+    #sidebar .above a {
+      color: {{#80}};
+      transition: ease-out 0.3s;
     }
 
     #content {
@@ -289,25 +302,25 @@
         margin-left: 0;
     }
 
-    #sidebar ul li:nth-child(even) {
+    #sidebar .sidebar-item:nth-child(even) {
     background-color: {{#10}};
 
     transition: ease-out 0.15s;
     }
 
-    #sidebar ul li:nth-child(even):hover {
+    #sidebar .sidebar-item:nth-child(even):hover {
     background-color: {{#30}};
 
     transition: ease-in 0.1s;
     }
 
-    #sidebar ul li:nth-child(odd) {
+    #sidebar .sidebar-item:nth-child(odd) {
     background-color: {{#20}};
 
     transition: ease-out 0.15s;
     }
 
-    #sidebar ul li:nth-child(odd):hover {
+    #sidebar .sidebar-item:nth-child(odd):hover {
     background-color: {{#30}};
 
     transition: ease-in 0.1s;
@@ -339,6 +352,30 @@ function topFunction() {
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
 }
+
+const sections = document.querySelectorAll('section');
+
+let observer = new IntersectionObserver(function(entries, self) {
+    entries.forEach(entry => {
+        const id = entry.target.getAttribute('id');
+        const sidebarItem = document.querySelector(`.sidebar-item[data-link-to="${id}"]`);
+        if (entry.isIntersecting) {
+            sidebarItem.classList.remove('above');
+            sidebarItem.classList.add('selected');
+        } else {
+            sidebarItem.classList.remove('selected');
+            if(entry.boundingClientRect.top < 0) {
+                sidebarItem.classList.add('above');
+            } else {
+                sidebarItem.classList.remove('above');
+            }
+        }
+    });
+}, {rootMargin: '0px', threshold: 0});
+
+sections.forEach(section => {
+    observer.observe(section);
+});
 
 const isMobile = mobileCheck();
 

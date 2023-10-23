@@ -23,7 +23,7 @@ namespace Elements
             }
 
             public override string ToString()
-            {
+            { 
                 if (name == null)
                     return GetElementsToString();
 
