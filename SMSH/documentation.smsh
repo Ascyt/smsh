@@ -137,8 +137,10 @@ This will automatically add the title for that section and add the section to th
 
 If you do not want a default title, put two hashes <code ##> at the start instead of one <code #>.
 
+If you put something right after the <code #> in braces <code (> <code )>, it will be the description of the section. This description gets shown when you hover over the section's sidebar item.
+
 Here's what this section ("Sections") looks like:
-.pre # Sections
+.pre #(Structure the file into sections which show in the sidebar)
 
 Also, note that special elements cannot be defined under sections.
 
