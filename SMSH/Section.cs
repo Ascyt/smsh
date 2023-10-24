@@ -11,19 +11,21 @@ namespace Elements
             public string FormattedName => index.ToString();
 
             public string? name;
+            public string? description;
             public List<Element> elements = new List<Element>();
             public bool withTitle;
 
-            public Section(string? name, bool withTitle)
+            public Section(string? name, bool withTitle, string? description)
             {
                 this.name = name;
                 this.withTitle = withTitle;
+                this.description = description;
                 
                 index = ++highestIndex;
             }
 
             public override string ToString()
-            { 
+            {
                 if (name == null)
                     return GetElementsToString();
 

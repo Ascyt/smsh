@@ -8,7 +8,7 @@ $myCustomClass
     color: green;
     font-size: medium;
 	
-# What is SMSH? 
+#(Short overview of what SMSH is) What is SMSH? 
 
 SMSH stands for <b Simple Markup for Styled HTML>. 
 It is essentially a fast and easy markup language used to write a pretty and structured HTML document.
@@ -20,7 +20,7 @@ SMSH handles the sections, the HTML tags and more, making them all much easier t
 Since SMSH simply compiles to HTML (with some predefined CSS included), anyone can just open up the compiled HTML \
 in their web browser, without the need for any install, setup, unzip, etc. 
 
-# Compiler
+#(About the compiler and how to use it) Compiler
 
 The SMSH compiler is written in C#, and you can download it on <a{https://github.com/Ascyt/smsh} GitHub>. 
 Here you can also find the source code, together with the code used to generate this documentation, which, by the way, is also written in SMSH.
@@ -29,7 +29,7 @@ Here you can also find the source code, together with the code used to generate 
 
 Argument 1 is for the input file, and there is an optional argument <code -o> for the output file, which defaults to <code <i filename>.html>. 
 
-# Element syntax
+#(How to write elements) Element syntax
 
 SMSH goes from top to bottom. Empty lines and lines containing nothing but whitespaces are completely ignored. You can define a whole element by doing <code .<i tag>>, and then writing the text body after it like this:
 
@@ -94,7 +94,7 @@ Lines that start with <code \>> get completely ignored and act as comments.
 > I am a comment :)
 
 
-# Element attributes
+#(Attributes for elements, for styling and links) Element attributes
 
 When you have a an element, you can add attributes next to the tag: 
 .card 
@@ -118,7 +118,7 @@ So you can embed the funny Garfield comic that I keep forgetting about like this
     .img[width:400px;height:auto;]{https://i.kym-cdn.com/photos/images/original/002/346/435/f06.jpg} Garfield comic
     > Alright alright, I might've made the image a little smaller than it would be normally ;)
 
-# Element inline
+#(Define elements inside of text) Element inline
 
 You can also put elements inside of lines, by wrapping them in corner braces (<code \<> <code \>>). The first argument is the element, the rest is the text.
 Note that you don't have to include a <code .> before the element for inline. 
@@ -130,7 +130,7 @@ Here's an example:
 
 .(low) Hint: Put a <code \\> before <code \<> or <code \>> to escape them and write them as normal characters.
 
-# Sections
+#(Structure the file into sections which show in the sidebar) Sections
 You can define a section by having a line starting with a <code #> symbol. 
 
 This will automatically add the title for that section and add the section to the sidebar on the left, so you're able to click on it to jump to it.
@@ -142,7 +142,7 @@ Here's what this section ("Sections") looks like:
 
 Also, note that special elements cannot be defined under sections.
 
-# Custom CSS classes
+#(How do define your own CSS classes to be used) Custom CSS classes
 
 You can create custom CSS classes using the <code $> prefix. Here is an example:
 
@@ -155,7 +155,7 @@ Everything indented is part of the CSS class. You must define CSS classes before
 
 .(myCustomClass) Example usage of above class
 
-# Element list
+#(A list of the most common SMSH elements) Element list
 SMSH supports pretty much every HTML tag out there, to some degree at least. However, these are the most common ones:
 
 .card
@@ -238,7 +238,7 @@ SMSH supports pretty much every HTML tag out there, to some degree at least. How
     .card
         . Card <code .card>
 
-# Special element list
+#(A list of all available special elements) Special element list
 .card 
     .ul
         .li 
@@ -267,7 +267,7 @@ SMSH supports pretty much every HTML tag out there, to some degree at least. How
             .h4 Here:
             .pre :favicon https://www.ascyt.com/projects/smsh/favicon.ico
 
-# Notes
+#(Information about me and this project) Notes
 
 I made this mostly for writing notes in school, but hey, why not publish it. I'm a 16 year old programmer from Austria and you can learn more about me on my <a{https://ascyt.com/} website>. I'm looking forward to adding more features, check <code to-fix.html> in the repo for things I'm planning on!
 Thanks for checking this smaller project out :)

@@ -6,6 +6,8 @@ namespace Elements
     {
         static Dictionary<string, string> ExtractAttributes(int lineIndex, ref string trimmedLine, Dictionary<string, char[]> attributes)
         {
+            // TODO: Allow for escaping characters (ignore if '\\' before, at the end replace with character)
+
             string newTrimmedLine = "";
             Dictionary<string, string> result = new Dictionary<string, string>();
 

@@ -32,7 +32,7 @@ namespace Elements
 
         public Elements(string markup)
         {
-            Section currentSection = new(null, false);
+            Section currentSection = new(null, false, null);
 
             // Go through each line
             string[] lines = markup.Split('\n');
@@ -48,7 +48,14 @@ namespace Elements
                     case '#': // Section
                         sections.Add(currentSection);
 
-                        currentSection = new Section(line.Substring(1).Trim(), true);
+                        string? description = null;
+                        Dictionary<string, string> attributes = ExtractAttributes(i, ref line, getAttributes);
+                        if (attributes.ContainsKey("class"))
+                        {
+                            description = attributes["class"];
+                        }
+
+                        currentSection = new Section(line.Substring(1).Trim(), true, description);
                         break;
                     case ' ':
                     case '\t':

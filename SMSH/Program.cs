@@ -77,7 +77,9 @@ public class Program
             if (section.name == null)
                 continue;
 
-            sidebar += $"<li class=\"sidebar-item\" data-link-to=\"{section.FormattedName}\"><a href=\"#{section.FormattedName}\" onclick=\"sectionClick({section.FormattedName})\">{section.name}</a></li>";
+            sidebar += $"<li class=\"sidebar-item\" data-link-to=\"{section.FormattedName}\">" +
+                $"<a href=\"#{section.FormattedName}\" {(section.description != null ? $"title=\"{section.description}\" " : "")}onclick=\"sectionClick({section.FormattedName})\">{section.name}" +
+                $"</a></li>";
         }
 
         string body = "";
