@@ -8,7 +8,6 @@ Here are some bug fixes/features I'm working to fix, in no particular order.
 
 .ul 
 	.li Indents are a little weird, <code .\\t> breaks things
-	.li Don't force elements after sections <(low) (maybe? feedback appreciated!)>
 
 # Features
 
@@ -23,13 +22,13 @@ Here are some bug fixes/features I'm working to fix, in no particular order.
 	.li Override default CSS using <code %> character (same as <code $>, but without <code .> (no class))
 	.li <code \\[string] [replacement]> replacement <(low) (<code \\a b> replaces all instances of <code \\a> with <code b>)>. Longer strings have priority
 	,
-	.li <code :favicon> directory/website to favicon
 	.li <code :bg> Background color
-	.li <code :font> default font
 	.li <code :margin> default margin length
-	.li <code :spaces [amount]> uses spaces instead of tabs. 0 for tabs (default)
 	.li <code :theme auto> auto detects browser color scheme (when implemented make new default)
 	,
 	.li <code \<:> <code \>> multi-line comment
+	,
+	.li <code -c> compiler command: Takes an html file as input, takes the body, strips JS from it (incl. onclick and similar), returns smsh with that body. If no <code -o>, replace original file.
+	.li Ability to override special tags with the compiler. For example, <code smsh file.smsh :"theme light" -o fileLight.html> should compile the file to <code fileLight.html> in light mode, even if the SMSH file specifies dark mode.
 
 > At this rate, the term "simple" won't make sense for long anymore lol

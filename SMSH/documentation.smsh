@@ -140,7 +140,7 @@ If you do not want a default title, put two hashes <code ##> at the start instea
 Here's what this section ("Sections") looks like:
 .pre # Sections
 
-Elements must be under sections, and special elements (starting with <code :>) must not be. 
+Also, note that special elements cannot be defined under sections.
 
 # Custom CSS classes
 
