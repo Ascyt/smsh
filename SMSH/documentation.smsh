@@ -137,14 +137,14 @@ This will automatically add the title for that section and add the section to th
 
 If you do not want a default title, put two hashes <code ##> at the start instead of one <code #>.
 
-If you put something right after the <code #> in braces <code (> <code )>, it will be the description of the section. This description gets shown when you hover over the section's sidebar item.
+If you put something right after the <code #> in braces <code (> <code )>, it will be the description of the section. This is the dark gray text you see under the sections, and also gets shown when you hover over the section's sidebar item. This is optional.
 
 Here's what this section ("Sections") looks like:
-.pre #(Structure the file into sections which show in the sidebar)
+.pre #(Structure the file into sections which show in the sidebar) Sections
 
 Also, note that special elements cannot be defined under sections.
 
-#(How do define your own CSS classes to be used) Custom CSS classes
+#(How to define your own CSS classes to be used) Custom CSS classes
 
 You can create custom CSS classes using the <code $> prefix. Here is an example:
 

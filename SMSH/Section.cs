@@ -32,7 +32,8 @@ namespace Elements
                 string result = $"<section id=\"{FormattedName}\">";
 
                 if (withTitle)
-                    result += $"<h1>{name}</h1>";
+                    result += $"<h1{(description == null ? " style=\"margin-bottom:10px\"" : "")}>{name}</h1>" +
+                        (description != null ? $"<div class=\"sectionDesc\">{description}</div>" : "");
 
                 result += GetElementsToString();
 
