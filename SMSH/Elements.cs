@@ -206,17 +206,17 @@ namespace Elements
 
                         customClass = trimmedLine.Substring(1).Trim();
 
-                        if (customClasses.ContainsKey(trimmedLine.Substring(1).Trim()))
+                        if (customClasses.ContainsKey(customClass))
                             throw new CodeException($"Custom CSS class \"{customClass}\" already defined.", i);
 
                         customClasses[customClass] = "";
 
-                        return null;
+                        break;
                     default:
                         break;
                 }
 
-                Element element = new Element(tag, trimmedLine.Length == tag.Length + 1 ? "" : trimmedLine.Substring(tag.Length + 2), attributes);
+                Element? element = customClass != null ? null : new Element(tag, trimmedLine.Length == tag.Length + 1 ? "" : trimmedLine.Substring(tag.Length + 2), attributes);
 
                 i++;
 

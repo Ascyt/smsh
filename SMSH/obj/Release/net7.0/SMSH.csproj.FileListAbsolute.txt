@@ -27,3 +27,4 @@ C:\Users\FamZauner\Documents\SMSH\SMSH\obj\Release\net7.0\refint\SMSH.dll
 C:\Users\FamZauner\Documents\SMSH\SMSH\obj\Release\net7.0\SMSH.pdb
 C:\Users\FamZauner\Documents\SMSH\SMSH\obj\Release\net7.0\SMSH.genruntimeconfig.cache
 C:\Users\FamZauner\Documents\SMSH\SMSH\obj\Release\net7.0\ref\SMSH.dll
+C:\Users\filip\source\repos\SMSH\SMSH\obj\Release\net7.0\SMSH.sourcelink.json
