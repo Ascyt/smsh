@@ -6,42 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=0.8">
 <link rel="icon" href="{{FAVICON}}" type="image/x-icon">
     <title>{{TITLE}}</title>
-</head>
-
-<body>
-    <div id="wrapper">
-        <button onclick="openNav()" id="hamburger">#</button>
-
-        <nav id="sidebar">
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-            <ul>
-            {{SIDEBAR}}
-            </ul>
-        </nav>
-
-        <div id="content">
-          <div class="mobilemargin"></div>
-            {{BODY}}
-
-            {{CREDIT}}
-          <div class="mobilemargin"></div>
-        </div>
-
-
-        <a href="#" id="topBtn" title="{{TO_TOP_TEXT}}">
-          <?xml version="1.0" encoding="UTF-8"?>
-<svg style="margin-top:15px;fill:{{#c0}};" width="20px" height="20px" version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-<g transform="translate(0 20.853)">
-<rect x="16.711" width="66.578" height="10" ry="5" stroke-width=".20617"/>
-<g transform="translate(-1.1692 -7.3808)" stroke-width=".17867">
-<rect transform="rotate(135)" x="-18.282" y="-64.082" width="50" height="10" ry="5"/>
-<rect transform="matrix(.70711 .70711 .70711 -.70711 0 0)" x="54.082" y="8.2822" width="50" height="10" ry="5"/>
-</g>
-</g>
-</svg>
-</a>
-    </div>
-</body>
 
 <style>
     html {
@@ -345,6 +309,41 @@
 
     {{CUSTOM_STYLES}}
 </style>
+</head>
+
+<body>
+    <div id="wrapper">
+        <button onclick="openNav()" id="hamburger">#</button>
+
+        <nav id="sidebar">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <ul>
+            {{SIDEBAR}}
+            </ul>
+        </nav>
+
+        <div id="content">
+          <div class="mobilemargin"></div>
+            {{BODY}}
+
+            {{CREDIT}}
+          <div class="mobilemargin"></div>
+        </div>
+
+
+        <a href="#" id="topBtn" title="{{TO_TOP_TEXT}}">
+<svg style="margin-top:15px;fill:{{#c0}};" width="20px" height="20px" version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+<g transform="translate(0 20.853)">
+<rect x="16.711" width="66.578" height="10" ry="5" stroke-width=".20617"/>
+<g transform="translate(-1.1692 -7.3808)" stroke-width=".17867">
+<rect transform="rotate(135)" x="-18.282" y="-64.082" width="50" height="10" ry="5"/>
+<rect transform="matrix(.70711 .70711 .70711 -.70711 0 0)" x="54.082" y="8.2822" width="50" height="10" ry="5"/>
+</g>
+</g>
+</svg>
+</a>
+    </div>
+
 
 <script>
 window.mobileCheck = function() {
@@ -430,5 +429,5 @@ function sectionClick(formattedName) {
     }
 }
 </script>
-
+</body>
 </html>

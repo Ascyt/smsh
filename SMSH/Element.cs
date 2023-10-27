@@ -45,6 +45,8 @@ namespace Elements
                 this.text = text;
             }
            
+            private static readonly string[] tagsWithoutEnd = new string[] { "<area>", "<base>", "<br>"," <col>", "<embed>", "<hr>", "<img>", "<input>", "<keygen>", "<link>", "<menuitem>", "<meta>", "<param>", "<source>", "<track>", "<wbr>" };
+
             public override string ToString()
             {
                 string result = $"<{tag}";
@@ -67,7 +69,9 @@ namespace Elements
                     result += text;
                 foreach (Element element in elements)
                     result += element.ToString();
-                result += $"</{tag}>";
+
+                if (!tagsWithoutEnd.Contains(tag))
+                    result += $"</{tag}>";
 
                 return result;
             }
