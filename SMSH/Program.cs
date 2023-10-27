@@ -119,7 +119,7 @@ public class Program
     }
 
     // minified credit
-    const string CREDIT = @"<div id=credit><span class=""low t"" id=""credit"">This file has been generated using SMSH, a fast, easy and open-source markup language used to write a pretty and structured HTML document. <a class=""low"" href=https://ascyt.com/projects/smsh target=_blank>Learn More</a></span></div>";
+    const string CREDIT = @"<div id=credit><span class=""low t"" id=""credit"">This file has been generated using SMSH, a fast, easy and open-source markup language used to write a pretty and structured HTML document. <a class=""low"" href=https://ascyt.com/projects/smsh target=_blank>Learn More</a> | <a class=""low"" href=https://ascyt.com/donate target=_blank>Donate &#x2661</a></span></div>";
 
     // minified html
     const string HTML =
