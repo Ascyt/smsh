@@ -56,14 +56,14 @@ public class Program
             Console.WriteLine($"File has been compiled to HTML at: {Path.GetFullPath(outputPath)}");
         }
         catch (NotImplementedException e) { throw e; } // Just so I can quickly comment out the other exceptions
-        catch (CodeException e)
+        /*catch (CodeException e)
         {
             Console.WriteLine(e);
         }
         catch (Exception e)
         {
             Console.WriteLine($"Error:\n{e.Message}");
-        }
+        }*/
     }
 
     public static string FormatHTML(string markup, string html)

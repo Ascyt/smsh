@@ -22,12 +22,19 @@ namespace Elements
         public string font = "Arial";
         public string favicon = @"https://www.ascyt.com/projects/smsh/favicon.ico";
 
-        private readonly static Dictionary<string, char[]> getAttributes = new Dictionary<string, char[]>()
-            {
-                {"class", new char[2] { '(', ')' }},
-                {"style", new char[2] { '[', ']' }},
-                {"href", new char[2] { '{', '}' }},
-            };
+        private static readonly Dictionary<string, string[]> SHORTHAND_TAGS = new()
+        {
+            ["uli"] = new string[2] {"ul", "li"},
+            ["oli"] = new string[2] {"ol", "li"},
+            ["row"] = new string[2] {"table", "tr"},
+        };
+
+        private readonly static Dictionary<string, char[]> getAttributes = new()
+        {
+            ["class"] = new char[2] { '(', ')' },
+            ["style"] = new char[2] { '[', ']' },
+            ["href"] = new char[2] { '{', '}' },
+        };
 
 
         public Elements(string markup)
@@ -70,7 +77,7 @@ namespace Elements
                         }
                         break;
                     default:
-                        TryAddElement(GetElement(line, ref i, 0), currentSection?.elements);
+                        TryAddElement(GetElement(line, ref i, 0, null), currentSection?.elements);
                         break;
                 }
             }
@@ -80,18 +87,23 @@ namespace Elements
 
             void TryAddElement(Element? element, List<Element>? elementList)
             {
-                if (element != null && elementList != null)
+                if (element == null || elementList == null)
                 {
-                    elementList.Add(element);
+                    return;
                 }
+
+                elementList.Add(element);
             }
 
 
-            Element? GetElement(string line, ref int i, int indents)
+            Element? GetElement(string line, ref int i, int indents, Element? parent, Element? shorthandParent = null)
             {
+                if (line.TrimStart().Length == 0)
+                    return null;
+
                 string trimmedLine = line.Substring(GetIndentIndex(indents));
 
-                if (trimmedLine.TrimStart().Length == 0 || trimmedLine[0] == '>')
+                if (trimmedLine[0] == '>')
                     return null;
 
                 if ("\t ".Contains(trimmedLine[0]))
@@ -99,7 +111,7 @@ namespace Elements
 
                 if (!KEYWORD_CHARS.Contains(trimmedLine[0]))
                 {
-                    return GetElement(line.Insert(GetIndentIndex(indents), ". "), ref i, indents);
+                    return GetElement(line.Insert(GetIndentIndex(indents), ". "), ref i, indents, parent);
                 }
 
 
@@ -216,7 +228,18 @@ namespace Elements
                         break;
                 }
 
-                Element? element = customClass != null ? null : new Element(tag, trimmedLine.Length == tag.Length + 1 ? "" : trimmedLine.Substring(tag.Length + 2), attributes);
+                Element? GetThisElement()
+                {
+                    if (customClass != null)
+                    {
+                        return null;
+                    }
+
+                    Element element = new Element(tag, trimmedLine.Length == tag.Length + 1 ? "" : trimmedLine.Substring(tag.Length + 2), attributes);
+
+                    return element;
+                }
+                Element? element = GetThisElement();
 
                 i++;
 
@@ -235,16 +258,47 @@ namespace Elements
                             break;
                         }
 
-                        TryAddElement(GetElement(lines[i], ref i, actualIndents), element.elements);
+                        TryAddElement(GetElement(lines[i], ref i, actualIndents, element), element.elements);
                     }
 
                     i++;
 
                     if (i >= lines.Length)
-                        return element;
+                        break;
 
                     actualIndents = ActualIndents(lines[i]);
                 }
+
+                if (element != null && shorthandParent == null && SHORTHAND_TAGS.ContainsKey(element.tag))
+                {
+                    string[] shorthandValues = SHORTHAND_TAGS[element.tag];
+
+                    shorthandParent = new Element(shorthandValues[0], "", attributes);
+
+                    shorthandParent.elements.Add(element);
+
+                    while (i < lines.Length && ActualIndents(lines[i]) == indents)
+                    {
+                        Element? nextElement = GetElement(lines[i], ref i, indents, parent, shorthandParent);
+
+                        if (nextElement == null || nextElement.tag != element.tag)
+                            break;
+
+                        nextElement.tag = shorthandValues[1];
+
+                        TryAddElement(nextElement, shorthandParent.elements);
+                        i++;
+
+                        if (i >= lines.Length)
+                            break;
+
+                        actualIndents = ActualIndents(lines[i]);
+                    }
+                    element.tag = shorthandValues[1];
+
+                    element = shorthandParent;
+                }
+
                 i--;
 
                 return element;

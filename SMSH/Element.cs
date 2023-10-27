@@ -45,7 +45,7 @@ namespace Elements
                 this.text = text;
             }
            
-            private static readonly string[] tagsWithoutEnd = new string[] { "<area>", "<base>", "<br>"," <col>", "<embed>", "<hr>", "<img>", "<input>", "<keygen>", "<link>", "<menuitem>", "<meta>", "<param>", "<source>", "<track>", "<wbr>" };
+            private static readonly string[] tagsWithoutEnd = new string[] { "area", "base", "br"," col", "embed", "hr", "img", "input", "keygen", "link", "menuitem", "meta", "param", "source", "track", "wbr" };
 
             public override string ToString()
             {
