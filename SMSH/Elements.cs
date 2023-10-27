@@ -247,8 +247,7 @@ namespace Elements
                     return element;
 
                 int actualIndents = ActualIndents(lines[i]);
-
-                while (actualIndents > indents)
+                while (actualIndents > indents || lines[i].TrimStart().Length == 0)
                 {
                     if (lines[i].Trim().Length > 0)
                     {
@@ -262,7 +261,6 @@ namespace Elements
                     }
 
                     i++;
-
                     if (i >= lines.Length)
                         break;
 
@@ -279,14 +277,20 @@ namespace Elements
 
                     while (i < lines.Length && ActualIndents(lines[i]) == indents)
                     {
+                        int start = GetIndentIndex(indents);
+
+                        if (lines[i].Length < start + element.tag.Length + 1 || lines[i].Substring(start, element.tag.Length + 1) != ('.' + element.tag))
+                            break;
+
                         Element? nextElement = GetElement(lines[i], ref i, indents, parent, shorthandParent);
 
-                        if (nextElement == null || nextElement.tag != element.tag)
+                        if (nextElement == null)
                             break;
 
                         nextElement.tag = shorthandValues[1];
 
                         TryAddElement(nextElement, shorthandParent.elements);
+
                         i++;
 
                         if (i >= lines.Length)

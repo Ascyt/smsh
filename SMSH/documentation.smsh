@@ -7,7 +7,7 @@
 $myCustomClass
     color: green;
     font-size: medium;
-	
+
 #(Short overview of what SMSH is) What is SMSH? 
 
 SMSH stands for <b Simple Markup for Styled HTML>. 
@@ -174,12 +174,11 @@ SMSH supports pretty much every HTML tag out there, to some degree at least. How
     .pre
         Multi-line code block <code .pre>
     
+    .h3 Unordered list
     .card 
         .ul
-            .li 
-                . unordered list
-            .li 
-                . unordered list
+            .li unordered list
+            .li unordered list
                 .ul 
                     .li nested
         .pre 
@@ -191,7 +190,12 @@ SMSH supports pretty much every HTML tag out there, to some degree at least. How
             .         .ul 
             .             .li nested
         
+    .card
+        .uli unordered list shorthand
+        .pre
+            . .uli unordered list shorthand
     
+    .h3 Ordered list
     .card
         .ol
             .li ordered list
@@ -200,8 +204,14 @@ SMSH supports pretty much every HTML tag out there, to some degree at least. How
             . .ol
             .     .li ordered list
             .     .li ordered list
-                    
                 
+    .card 
+        .oli ordered list shorthand
+        .pre
+            . .oli ordered list shorthand
+
+
+    .h3 Table
     .card
         .table 
             .tr
@@ -235,7 +245,16 @@ SMSH supports pretty much every HTML tag out there, to some degree at least. How
             .         .td row
             .         .td data
             . \> ...
-            
+    .card 
+        .row
+            .td table row shorthand
+        .row
+            .td table row shorthand
+        .pre 
+            . .row
+            .     .td table row shorthand
+            . .row
+            .     .td table row shorthand
             
     .card
         . Card <code .card>
