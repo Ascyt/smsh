@@ -3,10 +3,13 @@
 :toTopText Back to top
 :spaces 4
 :favicon https://www.ascyt.com/projects/smsh/favicon.ico
+:initialHash 1
 
 $myCustomClass
     color: green;
     font-size: medium;
+
+@ About
 
 #(Short overview of what SMSH is) What is SMSH? 
 
@@ -19,6 +22,13 @@ SMSH is mostly for writing documents and notes, however it is not made for writi
 SMSH handles the sections, the HTML tags and more, making them all much easier to write and to read. 
 Since SMSH simply compiles to HTML (with some predefined CSS included), anyone can just open up the compiled HTML \
 in their web browser, without the need for any install, setup, unzip, etc. 
+
+#(Information about me and this project) Notes
+
+I made this mostly for writing notes in school, but hey, why not publish it. I'm a 16 year old programmer from Austria and you can learn more about me on my <a{https://ascyt.com/} website>. I'm looking forward to adding more features, check <code to-fix.html> in the repo for things I'm planning on!
+If you'd like to donate to me and be the first person to do so, you can do so on <a{https://ko-fi.com/ascyt} ko-fi>. Thanks for checking this smaller project out :)
+
+@ Documentation
 
 #(About the compiler and how to use it) Compiler
 
@@ -144,6 +154,16 @@ Here's what this section ("Sections") looks like:
 
 Also, note that special elements cannot be defined under sections.
 
+#(Structure the file into tabs which show at the top of the page) Tabs
+Tabs are similar to sections, but they use the <code @> symbol instead. 
+
+This will add the title to the navigation bar at the top of the page. Only one tab can be visible at a time, if you click on one tab the other ones, including their sidebars get hidden. 
+
+Here's what this tab ("Documentation") looks like:
+.pre @ Documentation
+
+Note that you can either have no tabs and therefore no navigation bar at all, or you can use them and have to put the first tab before the first element.
+
 #(How to define your own CSS classes to be used) Custom CSS classes
 
 You can create custom CSS classes using the <code $> prefix. Here is an example:
@@ -156,6 +176,7 @@ You can create custom CSS classes using the <code $> prefix. Here is an example:
 Everything indented is part of the CSS class. You must define CSS classes before sections, and they must not be defined twice (case sensitive).
 
 .(myCustomClass) Example usage of above class
+> Class definition is on line 7
 
 #(A list of the most common SMSH elements) Element list
 SMSH supports pretty much every HTML tag out there, to some degree at least. However, these are the most common ones:
@@ -287,8 +308,7 @@ SMSH supports pretty much every HTML tag out there, to some degree at least. How
             . <b(high) favicon> href<(low) :> Link to the favicon (the icon text to the document title).
             .h4 Here:
             .pre :favicon https://www.ascyt.com/projects/smsh/favicon.ico
-
-#(Information about me and this project) Notes
-
-I made this mostly for writing notes in school, but hey, why not publish it. I'm a 16 year old programmer from Austria and you can learn more about me on my <a{https://ascyt.com/} website>. I'm looking forward to adding more features, check <code to-fix.html> in the repo for things I'm planning on!
-If you'd like to donate to me and be the first person to do so, you can do so on <a{https://ko-fi.com/ascyt} ko-fi>. Thanks for checking this smaller project out :)
+        .li 
+            . <b(high) initialHash> value<(low) :> The hash that gets used when none is specified (when the HTML is opened initially). Don't write the <code #> symbol, just write the number.
+            .h4 Here:
+            .pre :initialHash 1 

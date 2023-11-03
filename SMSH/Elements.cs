@@ -10,9 +10,10 @@ namespace Elements
 {
     public partial class Elements
     {
-        public const string KEYWORD_CHARS = ".,>#:$";
+        public const string KEYWORD_CHARS = ".,>@#:$";
 
-        public List<Section> sections = new();
+        public List<Tab> tabs = new();
+        public List<Section> sectionsWithoutTab = new();
         public string? title;
         public bool isLightTheme = false;
         public string toTopText = "Back to top";
@@ -21,6 +22,7 @@ namespace Elements
         public static int spaces = 0; // Amount of spaces used for indentation. 0 = tab
         public string font = "Arial";
         public string favicon = @"https://www.ascyt.com/projects/smsh/favicon.ico";
+        public string? initialHash;
 
         private static readonly Dictionary<string, string[]> SHORTHAND_TAGS = new()
         {
@@ -39,6 +41,7 @@ namespace Elements
 
         public Elements(string markup)
         {
+            Tab? currentTab = null;
             Section currentSection = new(null, false, null);
 
             // Go through each line
@@ -52,8 +55,21 @@ namespace Elements
 
                 switch (line[0])
                 {
+                    case '@': // Tab
+                        if (sectionsWithoutTab.Count > 0)
+                            throw new CodeException("When using tabs, elements before tabs are not allowed.", i, 0);
+
+                        if (currentTab != null)
+                        {
+                            currentTab.sections.Add(currentSection);
+                            currentSection = new Section(null, false, null);
+                        }
+
+                        currentTab = new Tab(line.Substring(1).Trim(), null);
+                        tabs.Add(currentTab);
+                        break;
                     case '#': // Section
-                        sections.Add(currentSection);
+                        (currentTab?.sections ?? sectionsWithoutTab).Add(currentSection);
 
                         string? description = null;
                         Dictionary<string, string> attributes = ExtractAttributes(i, ref line, getAttributes);
@@ -83,7 +99,7 @@ namespace Elements
             }
 
             if (currentSection != null)
-                sections.Add(currentSection);
+                (currentTab?.sections ?? sectionsWithoutTab).Add(currentSection);
 
             void TryAddElement(Element? element, List<Element>? elementList)
             {
@@ -170,8 +186,8 @@ namespace Elements
                     case '#': // Section
                         throw new CodeException("Section can't be defined in elements.", i, indents);
                     case ':': // Special tag
-                        if (sections.Count > 1)
-                            throw new CodeException("Special tag must be defined above all sections.", i);
+                        if ((currentTab?.sections ?? sectionsWithoutTab).Count > 0)
+                            throw new CodeException("Special tag must be defined above all sections and tabs.", i);
 
                         switch (line.Split(' ')[0].Substring(1).ToLower())
                         {
@@ -209,12 +225,15 @@ namespace Elements
                             case "favicon":
                                 favicon = line.Substring(8).Trim();
                                 return null;
+                            case "initialhash":
+                                initialHash = line.Substring(12).Trim();
+                                return null;    
                             default:
                                 throw new CodeException("Invalid special tag.", i);
                         }
                     case '$': // Custom class
-                        if (sections.Count > 1)
-                            throw new CodeException("Custom CSS class must be defined above all sections.", i);
+                        if ((currentTab?.sections ?? sectionsWithoutTab).Count > 0)
+                            throw new CodeException("Custom CSS class must be defined above all sections and tabs.", i);
 
                         customClass = trimmedLine.Substring(1).Trim();
 

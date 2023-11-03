@@ -25,7 +25,7 @@
   box-sizing:border-box;
     }
 
-    section {
+    .section {
     border-top-style: solid;
     border-top-width: 3px;
     border-color: {{#10}};
@@ -166,6 +166,7 @@
     }
 
     #content .sectionDesc {
+      text-align: center;
       font-size:small;
       color: {{#80}};
       text-align:center;
@@ -201,6 +202,7 @@
     #hamburger {
     position: fixed;
     font-size: 30px;
+    top:57px;
     cursor: pointer;
     vertical-align: middle;
     z-index: 10;
@@ -218,8 +220,8 @@
     position: fixed;
     height: 100%;
     width: 15%;
-    top: 0;
     left: 0;
+    top:58px;
     border-width: 10px;
     border-right: solid;
     border-color: {{#0c}};
@@ -307,11 +309,103 @@
     transition: ease-in 0.1s;
     }
 
+
+    #navbar {
+      position:fixed;
+      top:0;
+      width:100%;
+      border-width: 10px;
+      border-bottom: solid;
+      border-color: {{#0c}};
+    }
+    #navbar ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      margin-left: 15%;
+      overflow: hidden;
+      background-color: {{#08}};
+    }
+
+    #navbar ul li {
+      float: left;
+      
+      margin-right: 0px;
+      margin-left: 0px;
+    }
+
+    #navbar ul li a {
+      display: block;
+      text-align: center;
+      padding: 15px;
+      text-decoration: none;
+      color:{{#ff}};
+    }
+    
+    #navbar .navbar-item:nth-child(even) {
+    background-color: {{#10}};
+
+    transition: ease-out 0.15s;
+    }
+
+    #navbar .navbar-item:nth-child(even):hover {
+    background-color: {{#30}};
+
+    transition: ease-in 0.1s;
+    }
+
+    #navbar .navbar-item:nth-child(odd) {
+    background-color: {{#20}};
+
+    transition: ease-out 0.15s;
+    }
+
+    #navbar .navbar-item:nth-child(odd):hover {
+    background-color: {{#30}};
+
+    transition: ease-in 0.1s;
+    }
+
+    #navbar .navbar-item-selected {
+      background-color: {{#c0}};
+    }
+    #navbar .navbar-item-selected a {
+      color: {{#00}};
+    }
+
+    #topLeft {
+      float:left;
+      position:fixed;
+      top:0;
+      width:15%;
+      background-color: {{#08}};
+    }
+    #topLeft p {
+      text-align:center;
+      line-height:1;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      overflow:hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: {{#c0}};
+    }
+
+
     {{CUSTOM_STYLES}}
 </style>
 </head>
 
 <body>
+    <div id="topLeft">
+      <p>{{TITLE}}</p>
+    </div>
+
+    <nav id="navbar">
+      <ul>
+        {{NAVBAR}}
+      </ul>
+    </nav>
     <div id="wrapper">
         <button onclick="openNav()" id="hamburger">#</button>
 
@@ -323,6 +417,7 @@
         </nav>
 
         <div id="content">
+          <div style="margin-bottom:57px;"></div>
           <div class="mobilemargin"></div>
             {{BODY}}
 
@@ -331,7 +426,7 @@
         </div>
 
 
-        <a href="#" id="topBtn" title="{{TO_TOP_TEXT}}">
+        <a onclick="backToTop()" id="topBtn" title="{{TO_TOP_TEXT}}">
 <svg style="margin-top:15px;fill:{{#c0}};" width="20px" height="20px" version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
 <g transform="translate(0 20.853)">
 <rect x="16.711" width="66.578" height="10" ry="5" stroke-width=".20617"/>
@@ -364,7 +459,7 @@ function scrollFunction() {
   }
 }
 
-const sections = document.querySelectorAll('section');
+const sections = document.querySelectorAll('.section');
 
 let observer = new IntersectionObserver(function(entries, self) {
     entries.forEach(entry => {
@@ -395,6 +490,7 @@ const content = document.getElementById('content');
 const hamburger = document.getElementById('hamburger');
 const closebtn = document.getElementsByClassName('closebtn')[0];
 const mobilemargins = document.getElementsByClassName('mobilemargin');
+
 
 if (isMobile) {
     sidebar.classList.add('mobile');
@@ -427,6 +523,101 @@ function sectionClick(formattedName) {
     if (isMobile) {
         closeNav();
     }
+}
+
+const tabs = document.getElementsByClassName('tab');
+const tabSidebars = document.getElementsByClassName('tabSidebar');
+const navbarItems = document.getElementsByClassName('navbar-item');
+let selectedNavbarItem = undefined;
+const sidebarItems = document.getElementsByClassName('sidebar-item');
+
+function changeTab(formattedName) {
+  for (const sidebarItem of sidebarItems) {
+    sidebarItem.classList.remove('selected');
+    sidebarItem.classList.remove('above');
+  }
+
+
+  for (let i = 0; i < tabs.length; i++) {
+    if (tabs[i].id == formattedName) {
+      tabs[i].style.display = 'block';
+    } else {
+      tabs[i].style.display = 'none';
+    }
+  }
+
+  for (let i = 0; i < tabSidebars.length; i++) {
+    if (tabSidebars[i].id == formattedName) {
+      tabSidebars[i].style.display = 'block';
+    } else {
+      tabSidebars[i].style.display = 'none';
+    }
+  }
+
+  for (let i = 0; i < navbarItems.length; i++) {
+    if (selectedNavbarItem)
+      selectedNavbarItem.className = 'navbar-item';
+
+    if (navbarItems[i].id == formattedName) {
+      selectedNavbarItem = navbarItems[i];
+      navbarItems[i].className = 'navbar-item-selected';
+      break;
+     }
+  }
+}
+
+function tabClick(formattedName) {
+  changeTab(formattedName);
+
+  backToTop();
+}
+
+function findInitialTab(hash) {
+  for (let i = 0; i < tabs.length; i++) {
+    if (tabs[i].id == hash) {
+      return tabs[i];
+    }
+
+    const tabsSections = tabs[i].querySelectorAll(".section");
+    for (let ii = 0; ii < tabsSections.length; ii++) {
+      if (tabsSections[ii].id == hash) {
+        return tabs[i];
+      }
+    }
+  }
+
+  return null;
+}
+
+if (tabs.length > 0) {
+  let hash = window.location.hash.slice(1);
+
+  let initialTab = findInitialTab(hash);
+  if (!initialTab) {
+    hash = '{{INITIAL_HASH}}';
+    initialTab = findInitialTab(hash);
+  }
+
+  window.location.hash = hash;
+  
+  if (initialTab) {
+    if (initialTab.id == hash) {
+      tabClick(initialTab.id);
+    }
+    else {
+      changeTab(initialTab.id);
+    }
+  } 
+}
+
+function backToTop() {
+  let hash = findInitialTab(window.location.hash.slice(1))?.id;
+  if (!hash)
+    hash = '{{INITIAL_HASH}}';
+
+  window.location.hash = hash;
+
+  window.scrollTo(0, 0);
 }
 </script>
 </body>

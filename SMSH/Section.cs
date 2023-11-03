@@ -27,27 +27,41 @@ namespace Elements
             public override string ToString()
             {
                 if (name == null)
-                    return GetElementsToString();
+                    return Element.GetElementsToString(elements);
 
-                string result = $"<section id=\"{FormattedName}\">";
+                string result = $"<section class=\"section\" id=\"{FormattedName}\">";
 
                 if (withTitle)
                     result += $"<h1{(description == null ? " style=\"margin-bottom:10px\"" : "")}>{name}</h1>" +
                         (description != null ? $"<div class=\"sectionDesc\">{description}</div>" : "");
 
-                result += GetElementsToString();
+                result += Element.GetElementsToString(elements);
 
                 return result + "</section>";
             }
-
-            private string GetElementsToString()
+            public static string GetSectionsToString(List<Section> sections)
             {
                 string result = "";
                 
-                foreach (Element element in elements)
-                    result += element.ToString();
+                foreach (Section section in sections)
+                    result += section.ToString();
 
                 return result;
+            }
+
+            public static string GetSidebar(List<Section> sections)
+            {
+                string sidebar = "";
+                foreach (Section section in sections)
+                {
+                    if (section.name == null)
+                        continue;
+
+                    sidebar += $"<li class=\"sidebar-item\" data-link-to=\"{section.FormattedName}\">" +
+                        $"<a href=\"#{section.FormattedName}\" {(section.description != null ? $"title=\"{section.description}\" " : "")}onclick=\"sectionClick('{section.FormattedName}')\">{section.name}" +
+                        $"</a></li>";
+                }
+                return sidebar;
             }
         }
     }

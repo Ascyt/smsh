@@ -47,6 +47,16 @@ namespace Elements
            
             private static readonly string[] tagsWithoutEnd = new string[] { "area", "base", "br"," col", "embed", "hr", "img", "input", "keygen", "link", "menuitem", "meta", "param", "source", "track", "wbr" };
 
+            public static string GetElementsToString(List<Element> elements)
+            {
+                string result = "";
+                
+                foreach (Element element in elements)
+                    result += element.ToString();
+
+                return result;
+            }
+
             public override string ToString()
             {
                 string result = $"<{tag}";
