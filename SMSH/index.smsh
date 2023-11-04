@@ -1,0 +1,19 @@
+:title SMSH-Documentation
+:theme dark
+:toTopText Back to top
+:spaces 4
+:favicon https://www.ascyt.com/projects/smsh/favicon.ico
+:initialHash 0
+
+$myCustomClass
+    color: green;
+    font-size: medium;
+
+@ About
+!about
+
+@ Documentation
+!documentation
+
+> @ To-do
+> !to-do
