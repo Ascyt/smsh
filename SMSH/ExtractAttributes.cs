@@ -4,7 +4,7 @@ namespace Elements
 {
     public partial class Elements
     {
-        static Dictionary<string, string> ExtractAttributes(int lineIndex, ref string trimmedLine, Dictionary<string, char[]> attributes)
+        static Dictionary<string, string> ExtractAttributes(Elements elements, int lineIndex, ref string trimmedLine, Dictionary<string, char[]> attributes)
         {
             // TODO: Allow for escaping characters (ignore if '\\' before, at the end replace with character)
 
@@ -40,7 +40,7 @@ namespace Elements
 
                 if (hasChangedAttribute)
                 {
-                    throw new CodeException($"Unexpected character outside of attribute: '{trimmedLine[i]}'.", lineIndex, i);
+                    throw new CodeException(elements, $"Unexpected character outside of attribute: '{trimmedLine[i]}'.", lineIndex, i);
                 }
                 newTrimmedLine += trimmedLine[i];
             }
@@ -71,7 +71,7 @@ namespace Elements
                         }
 
                         // TODO: Add add line and column=index number to exception
-                        throw new CodeException($"Unexpected attribute closing character: '{c}'.", -1);
+                        throw new CodeException(elements, $"Unexpected attribute closing character: '{c}'.", -1);
                     }
                 }
                 return false;

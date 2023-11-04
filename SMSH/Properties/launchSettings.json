@@ -2,7 +2,7 @@
   "profiles": {
     "SMSH": {
       "commandName": "Project",
-      "commandLineArgs": "documentation.smsh",
+      "commandLineArgs": "index.smsh",
       "workingDirectory": "C:\\Users\\filip\\source\\repos\\SMSH\\SMSH"
     }
   }

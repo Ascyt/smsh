@@ -1,35 +1,3 @@
-:title SMSH-Documentation
-:theme dark
-:toTopText Back to top
-:spaces 4
-:favicon https://www.ascyt.com/projects/smsh/favicon.ico
-:initialHash 1
-
-$myCustomClass
-    color: green;
-    font-size: medium;
-
-@ About
-
-#(Short overview of what SMSH is) What is SMSH? 
-
-SMSH stands for <b Simple Markup for Styled HTML>. 
-It's essentially a easy and fast to write markup language that you can use to write a pretty and structured HTML document.
-
-.h2 What it's for
-
-SMSH is mostly for writing documents and notes, however it is not made for writing fully interactive webpages. 
-SMSH handles the sections, the HTML tags and more, making them all much easier to write and to read. 
-Since SMSH simply compiles to HTML (with some predefined CSS included), anyone can just open up the compiled HTML \
-in their web browser, without the need for any install, setup, unzip, etc. 
-
-#(Information about me and this project) Notes
-
-I made this mostly for writing notes in school, but hey, why not publish it. I'm a 16 year old programmer from Austria and you can learn more about me on my <a{https://ascyt.com/} website>. I'm looking forward to adding more features, check <code to-fix.html> in the repo for things I'm planning on!
-If you'd like to donate to me and be the first person to do so, you can do so on <a{https://ko-fi.com/ascyt} ko-fi>. Thanks for checking this smaller project out :)
-
-@ Documentation
-
 #(About the compiler and how to use it) Compiler
 
 The SMSH compiler is written in C#, and you can download it on <a{https://github.com/Ascyt/smsh} GitHub>. 
@@ -176,9 +144,24 @@ You can create custom CSS classes using the <code $> prefix. Here is an example:
 Everything indented is part of the CSS class. You must define CSS classes before sections, and they must not be defined twice (case sensitive).
 
 .(myCustomClass) Example usage of above class
-> Class definition is on line 7
+> Class definition is in index.smsh on line 8
 
-#(A list of the most common SMSH elements) Element list
+#(Import other SMSH files in your document) Multiple files
+
+To import another file into your SMSH document, you can use the <code !> operator. Put the name of the file after it, the <code .smsh> extension is optional. 
+
+This will act as though you have added the file's contents to the document. 
+
+For example, say have a file called <code hello.smsh> which is just one line:
+.pre
+    . Hello, world!
+You can then add this file to your main SMSH like this:
+.pre 
+    . !hello
+
+You can also add a single file multiple times.
+
+#(A list of the most common SMSH elements) Elements
 SMSH supports pretty much every HTML tag out there, to some degree at least. However, these are the most common ones:
 
 .card
@@ -280,7 +263,12 @@ SMSH supports pretty much every HTML tag out there, to some degree at least. How
     .card
         . Card <code .card>
 
-#(A list of all available special elements) Special element list
+#(A list of all available special elements) Special elements
+Special elements are elements that change the way the output HTML looks like, or how the compiler reads SMSH. They can be used to, for example, change the title of the HTML document. 
+A special element starts with <code :> and must not be defined before any elements or sections. 
+
+Here's a list of all the special elements available:
+
 .card 
     .ul
         .li 
@@ -297,7 +285,8 @@ SMSH supports pretty much every HTML tag out there, to some degree at least. How
         .li 
             . <b(high) hideCredit><(low) :> Removes the message shown at the bottom of the page.  
         .li 
-            . <b(high) spaces> amount<(low) :> Tells the compiler to use spaces as a substitute for tabs. Put a number after <code :spaces> to specify the amount, (4 if you're using Visual Studio Code).
+            . <b(high) spaces> amount<(low) :> Tells the compiler to use spaces as a substitute for tabs. Put a number after <code :spaces> to specify the amount, (4 if you're using Visual Studio Code). 
+            . <b Note that this is the only special element you don't need to put before all elements.> This means you can put them in SMSH imports and not have them break depending on the main file.
             .h4 Here:
             .pre :spaces 4
         .li 
@@ -311,4 +300,4 @@ SMSH supports pretty much every HTML tag out there, to some degree at least. How
         .li 
             . <b(high) initialHash> value<(low) :> The hash that gets used when none is specified (when the HTML is opened initially). Don't write the <code #> symbol, just write the number.
             .h4 Here:
-            .pre :initialHash 1 
+            .pre :initialHash 0

@@ -10,20 +10,25 @@ namespace Elements
 {
     public partial class Elements
     {
-        public const string KEYWORD_CHARS = ".,>@#:$";
+        public const string KEYWORD_CHARS = ".,>@#:$!";
+
+        public string file;
+        public static Stack<(string, int)> fileStack = new();
 
         public List<Tab> tabs = new();
         public List<Section> sectionsWithoutTab = new();
-        public string? title;
-        public bool isLightTheme = false;
-        public string toTopText = "Back to top";
-        public bool credit = true;
-        public Dictionary<string, string> customClasses = new();
-        public static int spaces = 0; // Amount of spaces used for indentation. 0 = tab
-        public string font = "Arial";
-        public string favicon = @"https://www.ascyt.com/projects/smsh/favicon.ico";
-        public string? initialHash;
 
+        public static string? title;
+        public static bool isLightTheme = false;
+        public static string toTopText = "Back to top";
+        public static bool credit = true;
+        public static Dictionary<string, string> customClasses = new();
+        public static string font = "Arial";
+        public static string favicon = @"https://www.ascyt.com/projects/smsh/favicon.ico";
+        public static string? initialHash;
+
+        public int spaces; // Amount of spaces used for indentation. 0 = tab
+        
         private static readonly Dictionary<string, string[]> SHORTHAND_TAGS = new()
         {
             ["uli"] = new string[2] {"ul", "li"},
@@ -38,10 +43,11 @@ namespace Elements
             ["href"] = new char[2] { '{', '}' },
         };
 
-
-        public Elements(string markup)
+        public Elements(string markup, string fileLocation, int? initialSpaces = null, Tab? initialTab = null)
         {
-            Tab? currentTab = null;
+            file = fileLocation;
+            spaces = initialSpaces ?? 0;
+            Tab? currentTab = initialTab;
             Section currentSection = new(null, false, null);
 
             // Go through each line
@@ -57,7 +63,7 @@ namespace Elements
                 {
                     case '@': // Tab
                         if (sectionsWithoutTab.Count > 0)
-                            throw new CodeException("When using tabs, elements before tabs are not allowed.", i, 0);
+                            throw new CodeException(this, "When using tabs, elements before tabs are not allowed.", i, 0);
 
                         if (currentTab != null)
                         {
@@ -72,7 +78,7 @@ namespace Elements
                         (currentTab?.sections ?? sectionsWithoutTab).Add(currentSection);
 
                         string? description = null;
-                        Dictionary<string, string> attributes = ExtractAttributes(i, ref line, getAttributes);
+                        Dictionary<string, string> attributes = ExtractAttributes(this, i, ref line, getAttributes);
                         if (attributes.ContainsKey("class"))
                         {
                             description = attributes["class"];
@@ -89,7 +95,7 @@ namespace Elements
 
                         if (!usingCorrect)
                         {
-                            throw new CodeException(spaces == 0 ? $"Invalid indentation (expected tabs, not spaces)" : $"Invalid indentation (expected {spaces} spaces, not tabs)", i, 0);
+                            throw new CodeException(this, spaces == 0 ? $"Invalid indentation (expected tabs, not spaces)" : $"Invalid indentation (expected {spaces} spaces, not tabs)", i, 0);
                         }
                         break;
                     default:
@@ -111,6 +117,8 @@ namespace Elements
                 elementList.Add(element);
             }
 
+            if (fileStack.Count > 0 && fileStack.Peek().Item1 == file)
+                fileStack.Pop();
 
             Element? GetElement(string line, ref int i, int indents, Element? parent, Element? shorthandParent = null)
             {
@@ -123,7 +131,7 @@ namespace Elements
                     return null;
 
                 if ("\t ".Contains(trimmedLine[0]))
-                    throw new CodeException($"Invalid indentation (expected {indents}).", i, indents);
+                    throw new CodeException(this, $"Invalid indentation (expected {indents}).", i, indents);
 
                 if (!KEYWORD_CHARS.Contains(trimmedLine[0]))
                 {
@@ -131,10 +139,10 @@ namespace Elements
                 }
 
 
-                Dictionary<string, string> attributes = ExtractAttributes(i, ref trimmedLine, getAttributes);
+                Dictionary<string, string> attributes = ExtractAttributes(this, i, ref trimmedLine, getAttributes);
 
                 string tag = trimmedLine.Split(' ')[0];
-                trimmedLine = FormatText(trimmedLine, indents, i);
+                trimmedLine = FormatText(this, trimmedLine, indents, i);
 
                 if (tag == ".")
                 {
@@ -154,7 +162,7 @@ namespace Elements
                     Element imageElement = new Element(tag, "", attributes);
 
                     if (!imageElement.attributes.ContainsKey("href"))
-                        throw new CodeException("Image must have a link attribute.", i);
+                        throw new CodeException(this, "Image must have a link attribute.", i);
 
                     imageElement.attributes["src"] = imageElement.attributes["href"];
                     imageElement.attributes.Remove("href");
@@ -183,17 +191,58 @@ namespace Elements
                         {
                             {"style", $"margin-bottom:{amount};"},
                         });
-                    case '#': // Section
-                        throw new CodeException("Section can't be defined in elements.", i, indents);
-                    case ':': // Special tag
-                        if ((currentTab?.sections ?? sectionsWithoutTab).Count > 0)
-                            throw new CodeException("Special tag must be defined above all sections and tabs.", i);
+                    case '!': // File
+                        string file = line.Substring(1).Trim();
+                        if (Path.GetExtension(file) != ".smsh")
+                        {
+                            if (Path.HasExtension(file))
+                                throw new CodeException(this, $"Invalid file extension: {Path.GetExtension(file)}", i, indents);
+                            file += ".smsh";
+                        }
 
-                        switch (line.Split(' ')[0].Substring(1).ToLower())
+                        if (!File.Exists(file))
+                            throw new CodeException(this, $"File not found: {file}", i, indents);
+
+                        if (fileStack.Any(x => x.Item1 == file))
+                            throw new CodeException(this, $"Circular file reference: {file}", i, 0);
+
+                        string fileText = File.ReadAllText(file).Replace("\r", "");
+
+                        (string, int) newStackElement = (fileLocation, i);
+                        fileStack.Push(newStackElement);
+
+                        Elements elements = new(fileText, file, spaces, currentTab);
+
+                        if (elements.tabs.Count == 0)
+                        {
+                            return null;
+                        }
+
+                        tabs.AddRange(elements.tabs);
+
+                        currentTab = elements.tabs.Last();
+                        if (currentTab.sections.Count > 0)
+                        {
+                            currentSection = currentTab.sections.Last();
+                            tabs.Last().sections.RemoveAt(tabs.Last().sections.Count - 1);
+                        }
+
+                        return null;
+                    case '#': // Section
+                        throw new CodeException(this, "Sections can't be defined in elements.", i, indents);
+                    case '@': // Tab
+                        throw new CodeException(this, "Tabs can't be defined in elements.", i, indents);
+                    case ':': // Special tag
+                        string specialTag = line.Split(' ')[0].Substring(1).ToLower();
+
+                        if ((currentTab?.sections ?? sectionsWithoutTab).Count > 0 && specialTag != "spaces")
+                            throw new CodeException(this, "Special tag must be defined above all sections and tabs.", i);
+
+                        switch (specialTag)
                         {
                             case "title":
                                 if (title != null)
-                                    throw new CodeException("Title already defined.", i);
+                                    throw new CodeException(this, "Title already defined.", i);
 
                                 title = line.Substring(7).Trim();
                                 return null;
@@ -206,7 +255,7 @@ namespace Elements
                                 bool isDark = dark.Contains(theme);
 
                                 if (!isLight && !isDark)
-                                    throw new CodeException("Invalid theme. (Valid options: light, dark)", i, line.Length - theme.Length);
+                                    throw new CodeException(this, "Invalid theme. (Valid options: light, dark)", i, line.Length - theme.Length);
 
                                 isLightTheme = isLight;
                                 return null;
@@ -229,16 +278,16 @@ namespace Elements
                                 initialHash = line.Substring(12).Trim();
                                 return null;    
                             default:
-                                throw new CodeException("Invalid special tag.", i);
+                                throw new CodeException(this, "Invalid special tag.", i);
                         }
                     case '$': // Custom class
                         if ((currentTab?.sections ?? sectionsWithoutTab).Count > 0)
-                            throw new CodeException("Custom CSS class must be defined above all sections and tabs.", i);
+                            throw new CodeException(this, "Custom CSS class must be defined above all sections and tabs.", i);
 
                         customClass = trimmedLine.Substring(1).Trim();
 
                         if (customClasses.ContainsKey(customClass))
-                            throw new CodeException($"Custom CSS class \"{customClass}\" already defined.", i);
+                            throw new CodeException(this, $"Custom CSS class \"{customClass}\" already defined.", i);
 
                         customClasses[customClass] = "";
 
@@ -348,7 +397,7 @@ namespace Elements
             }
         }
 
-        public static int GetIndentIndex(int indents)
+        public int GetIndentIndex(int indents)
             => spaces == 0 ? indents : indents * spaces;
     }
 }

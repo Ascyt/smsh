@@ -9,7 +9,7 @@ namespace Elements
 {
     public partial class Elements
     {
-        public static string FormatText(string text, int indents, int lineIndex)
+        public static string FormatText(Elements elements, string text, int indents, int lineIndex)
         {
             text = text.Replace("\\\\", "&#92;").Replace("\\<", "&lt;").Replace("\\>", "&gt;");
 
@@ -34,7 +34,7 @@ namespace Elements
                     formattingDelta--;
 
                     if (formattingDelta < 0)
-                        throw new CodeException($"Unexpected format closing tag.", lineIndex, indents, i);
+                        throw new CodeException(elements, $"Unexpected format closing tag.", lineIndex, indents, i);
 
                     if (formattingDelta == 0)
                     {
@@ -44,11 +44,11 @@ namespace Elements
                         }
                         else
                         {
-                            Dictionary<string,string> attributes = ExtractAttributes(lineIndex, ref currentFormat, getAttributes);
+                            Dictionary<string,string> attributes = ExtractAttributes(elements, lineIndex, ref currentFormat, getAttributes);
 
                             string formatTag = currentFormat.Split(' ')[0];
 
-                            currentFormat = FormatText(currentFormat.Substring(formatTag.Length).TrimStart(), indents, lineIndex);
+                            currentFormat = FormatText(elements, currentFormat.Substring(formatTag.Length).TrimStart(), indents, lineIndex);
 
                             Element element = new Element(formatTag, currentFormat, attributes);
                             result += element.ToString();
@@ -70,7 +70,7 @@ namespace Elements
             }
 
             if (formattingDelta > 0)
-                throw new CodeException("Unclosed format tag.", lineIndex, indents, text.Length);
+                throw new CodeException(elements, "Unclosed format tag.", lineIndex, indents, text.Length);
                                                                                                                                                                                                                                                                                                                                 result = result.Replace(" Ascyt ", " <b style=\"color:gold;text-shadow:1px 1px 0px orange\">Ascyt</b> "); // sshhh...
             return result;
         }

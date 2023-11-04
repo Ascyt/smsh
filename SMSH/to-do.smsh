@@ -1,6 +1,4 @@
-:title To-do
-
-# To-do
+:spaces 0
 
 Here are some bug fixes/features I'm working to fix, in no particular order.
 
@@ -12,15 +10,20 @@ Here are some bug fixes/features I'm working to fix, in no particular order.
 # Features
 
 .ul
-	.li Faster <code ul>/<code ol> with <code li> (<code .uli> & <code oli>)
-	.li Faster <code table> with <code tr> (<code row>)
-	.li <code ..> for previous element with same indent
-	,
-	.li Ability to use other SMSH files
 	.li config.smsh file in smsh directory, accesses this before all other SMSH files (default values by default)
-	.li Tabs using <code @> character (like sections)
 	.li Override default CSS using <code %> character (same as <code $>, but without <code .> (no class))
 	.li <code \\[string] [replacement]> replacement <(low) (<code \\a b> replaces all instances of <code \\a> with <code b>)>. Longer strings have priority
+	.li 
+		<(high) Functions!!> Initialize with <code ~~[name] [arguments]>. Inside function body, use arguments like this: <code \>[argument]>. Call function like this: <code \<~[name] \<[argument]\>\>>. Delete a function like this: <code ~![name]>
+		For example:
+		.pre
+			. ~~introduction name age
+			. 	my name's \>name and I'm \>age years old
+			. 
+			. Hello, \<~introduction \<Filip\> \<16\>\>.
+			. 
+			. ~!introduction
+		Should compile to just <code Hello, my name's Filip and I'm 16 years old.>
 	,
 	.li <code :bg> Background color
 	.li <code :margin> default margin length

@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Security.AccessControl;
 using System.Text.RegularExpressions;
 using System.Xml;
+using Elements;
 
 public class Program
 {
@@ -13,64 +14,105 @@ public class Program
     {
         public int line;
         public int? column;
+        public Elements.Elements elements;
 
-        public CodeException(string message, int line, int? indents = null, int? column = null) : base(message) 
+        public CodeException(Elements.Elements elements, string message, int line, int? indents = null, int? column = null) : base(message) 
         {
             this.line = line;
             if (column != null || indents != null)
-                this.column = (column ?? 0) + Elements.Elements.GetIndentIndex(indents ?? 0);
+                this.column = (column ?? 0) + elements.GetIndentIndex(indents ?? 0);
+
+            this.elements = elements;
         }
 
-        public override string ToString()
+        public void Print()
         {
-            return $"Error on line {line + 1}{(column != null ? $" at column {column + 1}" : "")}:\n\t{Message}";
+            WriteColor("Error in file ", ConsoleColor.Gray);
+            WriteColor(elements.file, ConsoleColor.DarkYellow);
+            WriteColor(", line ", ConsoleColor.Gray);
+            WriteColor((line + 1).ToString(), ConsoleColor.Yellow); 
+            WriteColor(column != null ? $", column " : "", ConsoleColor.Gray);
+            WriteColor((column + 1)?.ToString(), ConsoleColor.Yellow);
+            WriteColor(":\n\t", ConsoleColor.Gray);
+            WriteColor(Message, ConsoleColor.Red);
+
+            if (Elements.Elements.fileStack.Count == 0)
+                return;
+
+            WriteColor("\n\nStack (excluding current file):", ConsoleColor.Gray);
+                
+            foreach ((string, int) stack in Elements.Elements.fileStack)
+            {
+                WriteColor($"\n\t{stack.Item1}", ConsoleColor.DarkYellow);
+                WriteColor(", line ", ConsoleColor.Gray);
+                WriteColor((stack.Item2 + 1).ToString(), ConsoleColor.Yellow);
+            }
+
+            Console.ResetColor();
         }
     }
 
     public const bool USE_BOILERPLATE_FILE = false;
+    public static string currentHtml = "";
+
+    public static void WriteColor(string? text, ConsoleColor color)
+    {
+        if (string.IsNullOrEmpty(text))
+            return;
+
+        Console.ForegroundColor = color;
+        Console.Write(text);
+    }
 
     public static void Main(string[] args)
     {
+        currentHtml = USE_BOILERPLATE_FILE ? File.ReadAllText("./boilerplate.html") : HTML;
+
         if (args.Length == 0)
         {
-            Console.WriteLine("Error: No file path specified.");
+            WriteColor("Error: No file path specified.", ConsoleColor.Red);
             return;
         }
-
         try
         {
             string filePath = args[0];
-            string outputPath = args.Length > 2 && args[1] == "-o" ? args[2] : Path.ChangeExtension(filePath, ".html");
+            if (Path.GetExtension(filePath) != ".smsh")
+                WriteColor("Error: File must end in \".smsh\".", ConsoleColor.Red);
 
+            string outputPath = args.Length > 2 && args[1] == "-o" ? args[2] : Path.ChangeExtension(filePath, ".html");
 
             if (!File.Exists(filePath))
             {
-                Console.WriteLine($"File not found: {filePath}");
+                WriteColor($"File not found: {filePath}", ConsoleColor.Red);
                 return;
             }
 
             string markup = File.ReadAllText(filePath).Replace("\r", "");
 
-            File.WriteAllText(outputPath, FormatHTML(markup, USE_BOILERPLATE_FILE ? File.ReadAllText("./boilerplate.html") : HTML));
+            File.WriteAllText(outputPath, FormatHTML(markup, filePath));
 
-            Console.WriteLine($"File has been compiled to HTML at: {Path.GetFullPath(outputPath)}");
+            WriteColor($"File has been compiled to HTML at: ", ConsoleColor.Gray);
+            WriteColor(Path.GetFullPath(outputPath).ToString(), ConsoleColor.Green);
+            Console.ResetColor();
         }
         catch (NotImplementedException e) { throw e; } // Just so I can quickly comment out the other exceptions
-        /*catch (CodeException e)
+        catch (CodeException e)
         {
-            Console.WriteLine(e);
-        }
+            e.Print();
+        }/*
         catch (Exception e)
         {
             Console.WriteLine($"Error:\n{e.Message}");
         }*/
     }
 
-    public static string FormatHTML(string markup, string html)
+    public static string FormatHTML(string markup, string fileName)
     {
-        Elements.Elements elements = new(markup);
+        string html = currentHtml;
+
+        Elements.Elements elements = new(markup, fileName);
         
-        string title = elements.title ?? "Untitled";
+        string title = Elements.Elements.title ?? "Untitled";
         string body = "";
         string sidebar = "";
         string navbar = "";
@@ -93,7 +135,7 @@ public class Program
         html = regex.Replace(html, m => {
             string color = m.Groups[1].Value;
 
-            if (elements.isLightTheme) // Set hex to 0x100 - value 
+            if (Elements.Elements.isLightTheme) // Set hex to 0x100 - value 
             {
                 color = (0x100 - int.Parse(color, System.Globalization.NumberStyles.HexNumber)).ToString("X");
             }
@@ -102,7 +144,7 @@ public class Program
             });
 
         string customStyles = "";   
-        foreach (KeyValuePair<string, string> customClass in elements.customClasses)
+        foreach (KeyValuePair<string, string> customClass in Elements.Elements.customClasses)
         {
             customStyles += $".{customClass.Key}{{{customClass.Value}}}";
         }
@@ -112,12 +154,12 @@ public class Program
             .Replace("{{SIDEBAR}}", sidebar)
             .Replace("{{NAVBAR}}", navbar)
             .Replace("{{BODY}}", body)
-            .Replace("{{TO_TOP_TEXT}}", elements.toTopText)
-            .Replace("{{CREDIT}}", elements.credit ? CREDIT : "")
+            .Replace("{{TO_TOP_TEXT}}", Elements.Elements.toTopText)
+            .Replace("{{CREDIT}}", Elements.Elements.credit ? CREDIT : "")
             .Replace("{{CUSTOM_STYLES}}", customStyles)
-            .Replace("{{FONT}}", elements.font)
-            .Replace("{{INITIAL_HASH}}", elements.initialHash ?? (elements.tabs.Count == 0 ? elements.sectionsWithoutTab[0].FormattedName : elements.tabs[0].FormattedName))
-            .Replace("{{FAVICON}}", elements.favicon);
+            .Replace("{{FONT}}", Elements.Elements.font)
+            .Replace("{{INITIAL_HASH}}", Elements.Elements.initialHash ?? (elements.tabs.Count == 0 ? elements.sectionsWithoutTab[0].FormattedName : elements.tabs[0].FormattedName))
+            .Replace("{{FAVICON}}", Elements.Elements.favicon);
     }
 
     // minified credit
