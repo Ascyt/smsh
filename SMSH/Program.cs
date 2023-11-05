@@ -47,8 +47,6 @@ public class Program
                 WriteColor(", line ", ConsoleColor.Gray);
                 WriteColor((stack.Item2 + 1).ToString(), ConsoleColor.Yellow);
             }
-
-            Console.ResetColor();
         }
     }
 
@@ -62,6 +60,7 @@ public class Program
 
         Console.ForegroundColor = color;
         Console.Write(text);
+        Console.ResetColor();
     }
 
     public static void Main(string[] args)
@@ -77,7 +76,14 @@ public class Program
         {
             string filePath = args[0];
             if (Path.GetExtension(filePath) != ".smsh")
-                WriteColor("Error: File must end in \".smsh\".", ConsoleColor.Red);
+            {
+                if (Path.HasExtension(filePath))
+                {
+                    WriteColor("Error: File must end in \".smsh\".", ConsoleColor.Red);
+                    return;
+                }
+                filePath += ".smsh";
+            }
 
             string outputPath = args.Length > 2 && args[1] == "-o" ? args[2] : Path.ChangeExtension(filePath, ".html");
 
@@ -87,13 +93,12 @@ public class Program
                 return;
             }
 
-            string markup = File.ReadAllText(filePath).Replace("\r", "");
+            string markup = ReadFile(filePath); 
 
             File.WriteAllText(outputPath, FormatHTML(markup, filePath));
 
             WriteColor($"File has been compiled to HTML at: ", ConsoleColor.Gray);
             WriteColor(Path.GetFullPath(outputPath).ToString(), ConsoleColor.Green);
-            Console.ResetColor();
         }
         catch (NotImplementedException e) { throw e; } // Just so I can quickly comment out the other exceptions
         catch (CodeException e)
@@ -104,6 +109,10 @@ public class Program
         {
             Console.WriteLine($"Error:\n{e.Message}");
         }*/
+    }
+    public static string ReadFile(string filePath)
+    {
+        return File.ReadAllText(filePath).Replace("\r", "") + '\n';
     }
 
     public static string FormatHTML(string markup, string fileName)

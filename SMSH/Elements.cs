@@ -206,7 +206,7 @@ namespace Elements
                         if (fileStack.Any(x => x.Item1 == file))
                             throw new CodeException(this, $"Circular file reference: {file}", i, 0);
 
-                        string fileText = File.ReadAllText(file).Replace("\r", "");
+                        string fileText = Program.ReadFile(file);
 
                         (string, int) newStackElement = (fileLocation, i);
                         fileStack.Push(newStackElement);
@@ -360,9 +360,6 @@ namespace Elements
                         TryAddElement(nextElement, shorthandParent.elements);
 
                         i++;
-
-                        if (i >= lines.Length)
-                            break;
 
                         actualIndents = ActualIndents(lines[i]);
                     }
