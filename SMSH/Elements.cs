@@ -361,6 +361,9 @@ namespace Elements
 
                         i++;
 
+                        if (i >= lines.Length)
+                            break;
+
                         actualIndents = ActualIndents(lines[i]);
                     }
                     element.tag = shorthandValues[1];
