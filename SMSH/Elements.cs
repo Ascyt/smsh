@@ -104,7 +104,7 @@ namespace Elements
                         }
                         break;
                     default:
-                        TryAddElement(GetElement(line, ref i, 0, null), currentSection?.elements);
+                        TryAddElement(GetElement(lines, line, ref i, 0, null), currentSection?.elements);
                         break;
                 }
             }
@@ -127,7 +127,7 @@ namespace Elements
             elementList.Add(element);
         }
 
-        public Element? GetElement(string line, ref int i, int indents, Element? parent, Element? shorthandParent = null)
+        public Element? GetElement(string[] lines, string line, ref int i, int indents, Element? parent, Element? shorthandParent = null)
         {
             if (line.TrimStart().Length == 0)
                 return null;
@@ -142,14 +142,15 @@ namespace Elements
 
             if (!KEYWORD_CHARS.Contains(trimmedLine[0]))
             {
-                return GetElement(line.Insert(GetIndentIndex(indents), ". "), ref i, indents, parent);
+                return GetElement(lines, line.Insert(GetIndentIndex(indents), ". "), ref i, indents, parent);
             }
 
 
             Dictionary<string, string> attributes = ExtractAttributes(this, i, ref trimmedLine, getAttributes);
 
             string tag = trimmedLine.Split(' ')[0];
-            trimmedLine = FormatText(this, trimmedLine, indents, i);
+            if (trimmedLine[0] != '~')
+                trimmedLine = FormatText(this, trimmedLine, indents, i);
 
             if (tag == ".")
             {
@@ -306,25 +307,43 @@ namespace Elements
                         case '+':
                             string[] templateSplit = trimmedLine.Substring(2).Trim().Split(' ');
                             string templateName = templateSplit[0];
-                            templateSplit = templateSplit.Skip(1).ToArray();
+                            templateSplit = templateSplit.Skip(2).ToArray();
                             if (templates.ContainsKey(templateName))
                                 throw new CodeException(this, $"Template \"{templateName}\" already defined.", i);
-                            template = new Template(templateName, templateSplit);
-                            break;
+
+                            string templateContent = "";
+                            i++;
+                            while (i < lines.Length && ActualIndents(lines[i]) > indents)
+                            {
+                                if (i >= lines.Length)
+                                    break;
+                                templateContent += lines[i].Substring(GetIndentIndex(indents + 1)) + "\n";
+                                i++;
+                            }
+                            i--;
+
+                            if (templateContent == "")
+                                throw new CodeException(this, $"Template \"{templateName}\" has no content.", i);
+
+                            template = new Template(this, templateName, templateSplit, templateContent);
+                            templates[templateName] = template;
+                            return null;
                         case '-':
                             string templateName1 = trimmedLine.Substring(2).Trim();
                             if (!templates.Remove(templateName1))
                                 throw new CodeException(this, $"Template \"{templateName1}\" not found.", i);
-                            break;
+                            return null;
                         default:
-                            string[] templateSplit2 = trimmedLine.Substring(1).Trim().Split(' ');
-                            string templateName2 = templateSplit2[0];
-                            templateSplit2 = templateSplit2.Skip(1).ToArray();
+                            string templateName2 = trimmedLine.Split(' ')[0].Substring(1);
+                            string[] templateSplit2 = trimmedLine.Substring(4 + templateName2.Length).Trim().Split('>');
+                            // Trim all the templateSplit2 elements
+                            for (int j = 0; j < templateSplit2.Length; j++)
+                                templateSplit2[j] = templateSplit2[j].Trim();
+
                             if (!templates.ContainsKey(templateName2))
                                 throw new CodeException(this, $"Template \"{templateName2}\" not found.", i);
                             return templates[templateName2].FormatContent(templateSplit2);
                     }
-                    break;
                 default:
                     break;
             }
@@ -363,7 +382,7 @@ namespace Elements
                         break;
                     }
 
-                    TryAddElement(GetElement(lines[i], ref i, actualIndents, element), element.elements);
+                    TryAddElement(GetElement(lines, lines[i], ref i, actualIndents, element), element.elements);
                 }
 
                 i++;
@@ -394,7 +413,7 @@ namespace Elements
                     if (lines[i].Length < start + element.tag.Length + 1 || lines[i].Substring(start, element.tag.Length + 1) != ('.' + element.tag))
                         break;
 
-                    Element? nextElement = GetElement(lines[i], ref i, indents, parent, shorthandParent);
+                    Element? nextElement = GetElement(lines, lines[i], ref i, indents, parent, shorthandParent);
 
                     if (nextElement == null)
                         break;

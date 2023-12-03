@@ -74,7 +74,7 @@ Lines that start with <code \>> get completely ignored and act as comments.
 
 #(Attributes for elements, for styling and links) Element attributes
 
-When you have a an element, you can add attributes next to the tag: 
+When you have an element, you can add attributes next to the tag: 
 .card 
     .pre .b[color:blue] I'm Blue da ba dee da ba daa
     .b[color:blue] I'm Blue da ba dee da ba daa
@@ -145,6 +145,40 @@ Everything indented is part of the CSS class. You must define CSS classes before
 
 .(myCustomClass) Example usage of above class
 > Class definition is in index.smsh on line 8
+
+#(Use templates to avoid duplication) Templates
+
+Templates are snippets of text that can be used multiple times with certain values being different. They use the <code ~> symbol.
+
+You can define an element using <code ~+>, followed by its name and the parameter's names. Then the value is put indented after it. 
+
+For example:
+.pre 
+    . ~+introduction name age
+    .     My name's \<b \>name\> and I'm \>age years old. 
+~+introduction name age
+    My name's <b >name> and I'm >age years old. 
+
+As you can see, you can use the parameters using <code \><i parameter>> inside the template.
+,
+You can then access the template using just <code ~>, with the parameter values put after <code \>> symbols:
+.card 
+    .pre 
+        . ~introduction \>Filip \>16 and a half
+    ~introduction >Filip >16 and a half
+
+This also works inline:
+.card
+    .pre 
+        . My introduction is: \<~introduction \>John Smith \>&#92;\>18\>
+    My introduction is: <~introduction >John Smith >\>18> :)
+,
+You can then delete templates using <code ~-> and the template name:
+.pre
+    . ~-introduction
+~-introduction
+
+.(low) Note: Inline tags are currently not supported as parameter values.
 
 #(Import other SMSH files in your document) Multiple files
 
@@ -265,7 +299,7 @@ SMSH supports pretty much every HTML tag out there, to some degree at least. How
 
 #(A list of all available special elements) Special elements
 Special elements are elements that change the way the output HTML looks like, or how the compiler reads SMSH. They can be used to, for example, change the title of the HTML document. 
-A special element starts with <code :> and must not be defined before any elements or sections. 
+A special element starts with <code :> and must be defined before any elements or sections. 
 
 Here's a list of all the special elements available:
 

@@ -18,6 +18,7 @@ namespace Elements
             int formattingDelta = 0;
             const char FORMAT_START = '<';
             const char FORMAT_END = '>';
+            Template? template = null;
 
             for (int i = 0; i < text.Length; i++)
             {
@@ -26,11 +27,62 @@ namespace Elements
                     formattingDelta++;
 
                     if (formattingDelta == 1)
+                    {
+                        if (text[i + 1] == '~')
+                        {
+                            string templateName = "";
+                            i++;
+                            while (text[++i] != ' ')
+                            {
+                                templateName += text[i];
+                            }
+
+                            if (!templates.TryGetValue(templateName, out template))
+                            {
+                                throw new CodeException(elements, $"Template {templateName} not found.", lineIndex, indents, i);
+                            }
+                            formattingDelta -= template.parameters.Length + 1;
+                            i++;
+                        }
                         continue;
+                    }
+                }
+
+                if (template != null)
+                {
+                    currentFormat += text[i];
                 }
 
                 if (text[i] == FORMAT_END)
                 {
+                    if (template != null)
+                    {
+                        formattingDelta++;
+
+                        if (formattingDelta == 0)
+                        {
+                            currentFormat = currentFormat.Substring(0, currentFormat.Length - 1);
+                            string[] parameterValues = currentFormat.Split('>');
+                            for (int j = 0; j < parameterValues.Length; j++)
+                                parameterValues[j] = parameterValues[j].Trim();
+
+                            Element? element = template.FormatContent(currentFormat.Split('>'));
+                            string value = element?.ToString() ?? "";
+                            // Get rid of <br> at the end if exists
+                            if (value.EndsWith("<br></span>"))
+                            {
+                                value = value.Substring(0, value.Length - 11);
+                                value += "</span>";
+                            }
+                            result += value;
+                            
+                            template = null;
+                            currentFormat = "";
+                        }
+
+                        continue;
+                    }
+
                     formattingDelta--;
 
                     if (formattingDelta < 0)
@@ -66,7 +118,8 @@ namespace Elements
                     continue;
                 }
 
-                result += text[i];
+                if (template == null)
+                    result += text[i];
             }
 
             if (formattingDelta > 0)
