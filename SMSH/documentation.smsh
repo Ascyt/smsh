@@ -170,7 +170,7 @@ You can then access the template using just <code ~>, with the parameter values 
 This also works inline:
 .card
     .pre 
-        . My introduction is: \<~introduction \>John Smith \>&#92;\>18\>
+        . My introduction is: \<~introduction \>John Smith \>&#92;\>18\> :)
     My introduction is: <~introduction >John Smith >\>18> :)
 ,
 You can then delete templates using <code ~-> and the template name:
