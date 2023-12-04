@@ -209,6 +209,7 @@
     padding: 20px;
     padding-bottom: 10px;
     padding-top: 10px;
+    margin-top: 1px;
     border: none;
     background-color: {{#20}};
     color: {{#ff}};
@@ -490,6 +491,8 @@ const content = document.getElementById('content');
 const hamburger = document.getElementById('hamburger');
 const closebtn = document.getElementsByClassName('closebtn')[0];
 const mobilemargins = document.getElementsByClassName('mobilemargin');
+const topLeft = document.getElementById('topLeft');
+const navBar = document.getElementById('navbar');
 
 
 if (isMobile) {
@@ -500,6 +503,12 @@ if (isMobile) {
     hamburger.style.display = 'block';
     for (let mobilemargin of mobilemargins)
       mobilemargin.style.paddingBottom = '60px';
+
+    topLeft.style.display = 'none';
+    navbar.querySelectorAll('ul').forEach(element => {
+      element.style.marginLeft = 0;
+    });
+    
     closeNav();
 }
 
@@ -529,9 +538,13 @@ const tabs = document.getElementsByClassName('tab');
 const tabSidebars = document.getElementsByClassName('tabSidebar');
 const navbarItems = document.getElementsByClassName('navbar-item');
 let selectedNavbarItem = undefined;
+let selectedTab = undefined;
 const sidebarItems = document.getElementsByClassName('sidebar-item');
 
 function changeTab(formattedName) {
+  if (selectedTab?.id === formattedName)
+    return;
+
   for (const sidebarItem of sidebarItems) {
     sidebarItem.classList.remove('selected');
     sidebarItem.classList.remove('above');
@@ -541,6 +554,7 @@ function changeTab(formattedName) {
   for (let i = 0; i < tabs.length; i++) {
     if (tabs[i].id == formattedName) {
       tabs[i].style.display = 'block';
+      selectedTab = tabs[i];
     } else {
       tabs[i].style.display = 'none';
     }
@@ -565,6 +579,43 @@ function changeTab(formattedName) {
      }
   }
 }
+
+function findId(items, targetValue, comparisonOperator, reverseComparisonOperator) {
+  let result = targetValue;
+  let hasAnElement = false;
+
+  for (let i = 0; i < items.length; i++) {
+    if (comparisonOperator(Number(items[i].id), Number(targetValue)) && (!hasAnElement || reverseComparisonOperator(Number(items[i].id), Number(result)))) {
+      result = items[i].id;
+      hasAnElement = true;
+    }
+  }
+
+  return result;
+}
+
+document.addEventListener('keydown', function(event) {
+  const targetValue = selectedTab.id;
+  let targetId = undefined;
+
+  if (event.key == 'ArrowLeft') {
+    targetId = findId(tabs, targetValue, function(a, b) {return a < b}, function(a, b) {return a > b});
+  }
+  else if (event.key == 'ArrowRight') {
+    targetId = findId(tabs, targetValue, function(a, b) {return a > b}, function(a, b) {return a < b});
+  }
+  else {
+    return;
+  }
+
+  if (targetId == targetValue || targetId == targetValue) {
+    return;
+  }
+
+  tabClick(targetId);
+  window.location.hash = targetId;
+});
+
 
 function tabClick(formattedName) {
   changeTab(formattedName);
