@@ -334,6 +334,7 @@ namespace Elements
                                 throw new CodeException(this, $"Template \"{templateName1}\" not found.", i);
                             return null;
                         default:
+                            trimmedLine = trimmedLine.Replace("\\>", "&gt;");
                             string templateName2 = trimmedLine.Split(' ')[0].Substring(1);
                             string[] templateSplit2 = trimmedLine.Substring(4 + templateName2.Length).Trim().Split('>');
                             // Trim all the templateSplit2 elements
