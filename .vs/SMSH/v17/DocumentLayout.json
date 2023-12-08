@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\filip\\source\\repos\\SMSH\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{54454568-07D0-4170-B482-196FC1A46A53}|SMSH\\SMSH.csproj|c:\\users\\filip\\source\\repos\\smsh\\smsh\\elements.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{54454568-07D0-4170-B482-196FC1A46A53}|SMSH\\SMSH.csproj|solutionrelative:smsh\\elements.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{54454568-07D0-4170-B482-196FC1A46A53}|SMSH\\SMSH.csproj|c:\\users\\filip\\source\\repos\\smsh\\smsh\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{54454568-07D0-4170-B482-196FC1A46A53}|SMSH\\SMSH.csproj|solutionrelative:smsh\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{54454568-07D0-4170-B482-196FC1A46A53}|SMSH\\SMSH.csproj|c:\\users\\filip\\source\\repos\\smsh\\smsh\\formattext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54454568-07D0-4170-B482-196FC1A46A53}|SMSH\\SMSH.csproj|solutionrelative:smsh\\formattext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{54454568-07D0-4170-B482-196FC1A46A53}|SMSH\\SMSH.csproj|c:\\users\\filip\\source\\repos\\smsh\\smsh\\template.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{54454568-07D0-4170-B482-196FC1A46A53}|SMSH\\SMSH.csproj|solutionrelative:smsh\\template.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{54454568-07D0-4170-B482-196FC1A46A53}|SMSH\\SMSH.csproj|c:\\users\\filip\\source\\repos\\smsh\\smsh\\formattext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{54454568-07D0-4170-B482-196FC1A46A53}|SMSH\\SMSH.csproj|solutionrelative:smsh\\formattext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{54454568-07D0-4170-B482-196FC1A46A53}|SMSH\\SMSH.csproj|c:\\users\\filip\\source\\repos\\smsh\\smsh\\elements.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54454568-07D0-4170-B482-196FC1A46A53}|SMSH\\SMSH.csproj|solutionrelative:smsh\\elements.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54454568-07D0-4170-B482-196FC1A46A53}|SMSH\\SMSH.csproj|c:\\users\\filip\\source\\repos\\smsh\\smsh\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54454568-07D0-4170-B482-196FC1A46A53}|SMSH\\SMSH.csproj|solutionrelative:smsh\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{54454568-07D0-4170-B482-196FC1A46A53}|SMSH\\SMSH.csproj|c:\\users\\filip\\source\\repos\\smsh\\smsh\\section.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -46,7 +46,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -58,25 +58,26 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "Template.cs",
               "DocumentMoniker": "C:\\Users\\filip\\source\\repos\\SMSH\\SMSH\\Template.cs",
               "RelativeDocumentMoniker": "SMSH\\Template.cs",
               "ToolTip": "C:\\Users\\filip\\source\\repos\\SMSH\\SMSH\\Template.cs",
               "RelativeToolTip": "SMSH\\Template.cs",
-              "ViewState": "AQIAABAAAAAAAAAAAAAqwCIAAACAAAAA",
+              "ViewState": "AQIAACIAAAAAAAAAAAAYwDYAAAAQAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2023-11-22T18:52:28.656Z"
+              "WhenOpened": "2023-11-22T18:52:28.656Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "Elements.cs",
               "DocumentMoniker": "C:\\Users\\filip\\source\\repos\\SMSH\\SMSH\\Elements.cs",
               "RelativeDocumentMoniker": "SMSH\\Elements.cs",
               "ToolTip": "C:\\Users\\filip\\source\\repos\\SMSH\\SMSH\\Elements.cs",
               "RelativeToolTip": "SMSH\\Elements.cs",
-              "ViewState": "AQIAADwBAAAAAAAAAAAcwEgBAAA/AAAA",
+              "ViewState": "AQIAAC8BAAAAAAAAAAAcwEYBAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2023-11-04T19:11:15.879Z",
               "EditorCaption": ""
@@ -119,15 +120,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "FormatText.cs",
               "DocumentMoniker": "C:\\Users\\filip\\source\\repos\\SMSH\\SMSH\\FormatText.cs",
               "RelativeDocumentMoniker": "SMSH\\FormatText.cs",
               "ToolTip": "C:\\Users\\filip\\source\\repos\\SMSH\\SMSH\\FormatText.cs",
               "RelativeToolTip": "SMSH\\FormatText.cs",
-              "ViewState": "AQIAADUAAAAAAAAAAAAAAEoAAAAyAAAA",
+              "ViewState": "AQIAADYAAAAAAAAAAAAYwEwAAAAcAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2023-10-24T19:05:50.404Z"
+              "WhenOpened": "2023-10-24T19:05:50.404Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -155,7 +157,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\filip\\source\\repos\\SMSH\\SMSH\\Program.cs",
               "RelativeDocumentMoniker": "SMSH\\Program.cs",

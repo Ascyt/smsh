@@ -313,7 +313,7 @@ namespace Elements
 
                             string templateContent = "";
                             i++;
-                            while (i < lines.Length && ActualIndents(lines[i]) > indents)
+                            while (i < lines.Length && lines[i].Trim() != "" && ActualIndents(lines[i]) > indents)
                             {
                                 if (i >= lines.Length)
                                     break;

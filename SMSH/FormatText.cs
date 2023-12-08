@@ -69,10 +69,10 @@ namespace Elements
                             Element? element = template.FormatContent(currentFormat.Split('>'));
                             string value = element?.ToString() ?? "";
                             // Get rid of <br> at the end if exists
-                            if (value.EndsWith("<br></span>"))
+                            if (value.EndsWith("<br></span></span>"))
                             {
-                                value = value.Substring(0, value.Length - 11);
-                                value += "</span>";
+                                value = value.Substring(0, value.Length - 18);
+                                value += "</span></span>";
                             }
                             result += value;
                             

@@ -46,7 +46,15 @@ namespace Elements
                 string[] resultSplit = result.Split('\n');
                 int elementsI = 0;
 
-                return elements.GetElement(resultSplit, resultSplit[0], ref elementsI, 0, null);
+                Element root = new Element("span");
+                for (int i = 0; i < resultSplit.Length; i++)
+                {
+                    Element? element = elements.GetElement(resultSplit, resultSplit[i], ref elementsI, i, null);
+                    if (element != null)
+                        root.elements.Add(element);
+                }
+
+                return root;
             }
         }
     }
