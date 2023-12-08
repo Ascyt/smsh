@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SMSH")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7b92b71818efa88c5678a3344c37c46d5fab55ef")]
 [assembly: System.Reflection.AssemblyProductAttribute("SMSH")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SMSH")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
